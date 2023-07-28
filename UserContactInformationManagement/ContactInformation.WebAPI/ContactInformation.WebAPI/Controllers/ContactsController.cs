@@ -11,7 +11,8 @@ namespace ContactInformation.WebAPI.Controllers
                 new List<object>
                 {
                     new {Id = 1, Firstname = "Charis Arlie", Lastname = "Baclayon"},
-                    new {Id = 1, Firstname = "Leonel Christie", Lastname = "Baclayon"},
+                    new {Id = 2, Firstname = "Leonel Christie", Lastname = "Baclayon"},
+                    new {Id = 3, Firstname = "Grace Christian", Lastname = "Baclayon"}
                 });
         }
     }
