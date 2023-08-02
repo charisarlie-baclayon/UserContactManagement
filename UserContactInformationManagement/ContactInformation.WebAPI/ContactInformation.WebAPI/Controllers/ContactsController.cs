@@ -1,19 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ContactInformation.WebAPI.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ContactInformation.WebAPI.Controllers
 {
+    [Route("api/[controller]")]
     [ApiController]
     public class ContactsController : ControllerBase
     {
-        public JsonResult GetContacts()
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Contact>>> GetContacts()
         {
-            return new JsonResult(
-                new List<object>
-                {
-                    new {Id = 1, Firstname = "Charis Arlie", Lastname = "Baclayon"},
-                    new {Id = 2, Firstname = "Leonel Christie", Lastname = "Baclayon"},
-                    new {Id = 3, Firstname = "Grace Christian", Lastname = "Baclayon"}
-                });
+            return Ok(ContactsDataStore.Current.Contacts);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Contact>> GetContact(int id)
+        {
+            var contactToReturn = ContactsDataStore.Current.Contacts.FirstOrDefault(c => c.Id == id);
+            if (contactToReturn == null)
+            {
+                return NotFound();
+            }
+            return Ok(contactToReturn);
         }
     }
 }
