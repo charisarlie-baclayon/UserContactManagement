@@ -8,13 +8,13 @@ namespace ContactInformation.WebAPI.Controllers
     public class ContactsController : ControllerBase
     {
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Contact>>> GetContacts()
+        public async Task<IActionResult> GetContacts()
         {
             return Ok(ContactsDataStore.Current.Contacts);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Contact>> GetContact(int id)
+        public async Task<IActionResult> GetContact(int id)
         {
             var contactToReturn = ContactsDataStore.Current.Contacts.FirstOrDefault(c => c.Id == id);
             if (contactToReturn == null)
