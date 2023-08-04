@@ -59,7 +59,7 @@ namespace ContactInformation.WebAPI.Controllers
         }
 
         [HttpPut("{addressId}")]
-        public async Task<IActionResult> UpdateAddress(int contactId, int addressId, [FromBody] AddressUpdationDto addressToUpdate)
+        public async Task<IActionResult> UpdateAddress(int contactId, int addressId, [FromBody] AddressCreationDto addressToUpdate)
         {
             var contact = ContactsDataStore.Current.Contacts.FirstOrDefault(c => c.Id == contactId);
             if (contact == null)
@@ -80,7 +80,7 @@ namespace ContactInformation.WebAPI.Controllers
         }
 
         [HttpPatch("{addressId}")]
-        public async Task<IActionResult> PartiallyUpdateAddress(int contactId, int addressId, JsonPatchDocument<AddressUpdationDto> addressToUpdatePatchDocument)
+        public async Task<IActionResult> PartiallyUpdateAddress(int contactId, int addressId, JsonPatchDocument<AddressCreationDto> addressToUpdatePatchDocument)
         {
             var contact = ContactsDataStore.Current.Contacts.FirstOrDefault(c => c.Id == contactId);
             if (contact == null)
@@ -94,7 +94,7 @@ namespace ContactInformation.WebAPI.Controllers
                 return NotFound();
             }
 
-            var addressToPatch = new AddressUpdationDto()
+            var addressToPatch = new AddressCreationDto()
             {
                 AddressDescription = addressFromStore.AddressDescription,
                 AddressType = addressFromStore.AddressType,
@@ -117,7 +117,7 @@ namespace ContactInformation.WebAPI.Controllers
         }
 
         [HttpDelete("{addressId}")]
-        public async Task<IActionResult> DeleteAddress(int contactId, int addressId, JsonPatchDocument<AddressUpdationDto> addressToUpdatePatchDocument)
+        public async Task<IActionResult> DeleteAddress(int contactId, int addressId)
         {
             var contact = ContactsDataStore.Current.Contacts.FirstOrDefault(c => c.Id == contactId);
             if (contact == null)

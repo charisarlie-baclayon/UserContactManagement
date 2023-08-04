@@ -1,10 +1,9 @@
 ﻿using ContactInformation.WebAPI.Dtos.CustomValidations;
-using ContactInformation.WebAPI.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace ContactInformation.WebAPI.Dtos
 {
-    public class ContactCreationDto
+    public class ContactUpdationDto
     {
         [Required(ErrorMessage = "First name is required.")]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "First name must be between 2 and 50 characters.")]
@@ -14,7 +13,7 @@ namespace ContactInformation.WebAPI.Dtos
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Last name must be between 2 and 50 characters.")]
         public string LastName { get; set; } = string.Empty;
 
-        [Required(ErrorMessage ="At least one address is required.")]
+        [Required(ErrorMessage = "At least one address is required.")]
         [AtLeastOneAddressRequired(ErrorMessage = "At least one address is required.")]
         public List<AddressCreationDto>? Addresses { get; set; }
 
@@ -28,5 +27,6 @@ namespace ContactInformation.WebAPI.Dtos
 
         [Required(ErrorMessage = "Birth date is required.")]
         public DateTime BirthDate { get; set; }
+        public bool Favorite { get; set; }
     }
 }
