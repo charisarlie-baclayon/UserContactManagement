@@ -1,6 +1,5 @@
 ﻿using ContactInformation.WebAPI.Dtos;
 using ContactInformation.WebAPI.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,127 +9,196 @@ namespace ContactInformation.WebAPI.Controllers
     [ApiController]
     public class AddressesController : ControllerBase
     {
+        private readonly ILogger<AddressesController> _logger;
+
+        public AddressesController(ILogger<AddressesController> logger)
+        {
+            _logger = logger;
+        }
         [HttpGet]
         public async Task<IActionResult> GetAddresses(int contactId)
         {
-            var contact = ContactsDataStore.Current.Contacts.FirstOrDefault( c => c.Id == contactId);
-            if(contact == null)
+            try
             {
-                return NotFound();
+                var contact = ContactsDataStore.Current.Contacts.FirstOrDefault(c => c.Id == contactId);
+                if (contact == null)
+                {
+                    _logger.LogInformation($"Contact with id {contactId} was not found when accessing Contacts.");
+                    return NotFound();
+                }
+                var addresses = contact.Addresses!.ToList();
+                if (addresses.Any())
+                {
+                    _logger.LogInformation($"Addresses were not found when accessing Contact with id {contactId}.");
+                    return NotFound();
+                }
+                return Ok(addresses);
             }
-            return Ok(contact.Addresses!.ToList());
+            catch (Exception ex)
+            {
+                _logger.LogCritical(ex.Message);
+                return StatusCode(500, "Something went wrong.");
+            }
         }
 
         [HttpGet("{addressId}", Name = "GetAddress")]
         public async Task<IActionResult> GetAddress(int contactId, int addressId)
         {
-            var contact = ContactsDataStore.Current.Contacts.FirstOrDefault(c => c.Id == contactId);
-            if (contact == null)
+            try
             {
-                return NotFound();
+                var contact = ContactsDataStore.Current.Contacts.FirstOrDefault(c => c.Id == contactId);
+                if (contact == null)
+                {
+                    _logger.LogInformation($"Contact with id {contactId} was not found when accessing Contacts.");
+                    return NotFound();
+                }
+                var addressToReturn = contact.Addresses!.FirstOrDefault(a => a.Id == addressId);
+                if (addressToReturn == null)
+                {
+                    _logger.LogInformation($"Address with id {addressId} was not found when accessing Contact with id {contactId}.");
+                    return NotFound();
+                }
+                return Ok(addressToReturn);
             }
-            var addressToReturn = contact.Addresses!.FirstOrDefault(a => a.Id == addressId);
-            if (addressToReturn == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                _logger.LogCritical(ex.Message);
+                return StatusCode(500, "Something went wrong.");
             }
-            return Ok(addressToReturn);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateAddress(int contactId, [FromBody] AddressCreationDto addressToCreate)
         {
-            var contact = ContactsDataStore.Current.Contacts.FirstOrDefault(c => c.Id == contactId);
-            if (contact == null)
+            try
             {
-                return NotFound();
+                var contact = ContactsDataStore.Current.Contacts.FirstOrDefault(c => c.Id == contactId);
+                if (contact == null)
+                {
+                    _logger.LogInformation($"Contact with id {contactId} was not found when accessing Contacts.");
+                    return NotFound();
+                }
+                var maxAddressId = ContactsDataStore.Current.Contacts.SelectMany(c => c.Addresses!).Max(a => a.Id);
+
+                var newAddress = new Address()
+                {
+                    Id = ++maxAddressId,
+                    AddressDescription = addressToCreate.AddressDescription,
+                    AddressType = addressToCreate.AddressType,
+                };
+                contact.Addresses!.Add(newAddress);
+
+                return CreatedAtRoute("GetAddress", new { contactId = contactId, addressId = newAddress.Id }, newAddress);
             }
-            var maxAddressId = ContactsDataStore.Current.Contacts.SelectMany(c => c.Addresses!).Max(a => a.Id);
-
-            var newAddress = new Address()
+            catch (Exception ex)
             {
-                Id = ++maxAddressId,
-                AddressDescription = addressToCreate.AddressDescription,
-                AddressType = addressToCreate.AddressType,
-            };
-            contact.Addresses.Add(newAddress);
-
-            return CreatedAtRoute("GetAddress",new { contactId = contactId, addressId = newAddress.Id}, newAddress);
+                _logger.LogCritical(ex.Message);
+                return StatusCode(500, "Something went wrong.");
+            }
         }
 
         [HttpPut("{addressId}")]
         public async Task<IActionResult> UpdateAddress(int contactId, int addressId, [FromBody] AddressCreationDto addressToUpdate)
         {
-            var contact = ContactsDataStore.Current.Contacts.FirstOrDefault(c => c.Id == contactId);
-            if (contact == null)
+            try
             {
-                return NotFound();
+                var contact = ContactsDataStore.Current.Contacts.FirstOrDefault(c => c.Id == contactId);
+                if (contact == null)
+                {
+                    _logger.LogInformation($"Contact with id {contactId} was not found when accessing Contacts.");
+                    return NotFound();
+                }
+                var addressFromStore = contact.Addresses!.FirstOrDefault(a => a.Id == addressId);
+                if (addressFromStore == null)
+                {
+                    _logger.LogInformation($"Address with id {addressId} was not found when accessing Contact with id {contactId}.");
+                    return NotFound();
+                }
+
+                addressFromStore.AddressDescription = addressToUpdate.AddressDescription;
+                addressFromStore.AddressType = addressToUpdate.AddressType;
+
+                return AcceptedAtRoute("GetAddress", new { contactId = contactId, addressId = addressFromStore.Id }, addressFromStore);
             }
-            var addressFromStore = contact.Addresses!.FirstOrDefault(a => a.Id == addressId);
-            if (addressFromStore == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                _logger.LogCritical(ex.Message);
+                return StatusCode(500, "Something went wrong.");
             }
-
-            addressFromStore.AddressDescription = addressToUpdate.AddressDescription;
-            addressFromStore.AddressType = addressToUpdate.AddressType;
-
-            //return NoContent();
-            return AcceptedAtRoute("GetAddress", new { contactId = contactId, addressId = addressFromStore.Id }, addressFromStore);
         }
 
         [HttpPatch("{addressId}")]
         public async Task<IActionResult> PartiallyUpdateAddress(int contactId, int addressId, JsonPatchDocument<AddressCreationDto> addressToUpdatePatchDocument)
         {
-            var contact = ContactsDataStore.Current.Contacts.FirstOrDefault(c => c.Id == contactId);
-            if (contact == null)
+            try
             {
-                return NotFound();
+                var contact = ContactsDataStore.Current.Contacts.FirstOrDefault(c => c.Id == contactId);
+                if (contact == null)
+                {
+                    _logger.LogInformation($"Contact with id {contactId} was not found when accessing Contacts.");
+                    return NotFound();
+                }
+
+                var addressFromStore = contact.Addresses!.FirstOrDefault(a => a.Id == addressId);
+                if (addressFromStore == null)
+                {
+                    _logger.LogInformation($"Address with id {addressId} was not found when accessing Contact with id {contactId}.");
+                    return NotFound();
+                }
+
+                var addressToPatch = new AddressCreationDto()
+                {
+                    AddressDescription = addressFromStore.AddressDescription,
+                    AddressType = addressFromStore.AddressType,
+                };
+
+                addressToUpdatePatchDocument.ApplyTo(addressToPatch, ModelState);
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                if (!TryValidateModel(addressToPatch))
+                {
+                    return BadRequest(ModelState);
+                }
+                addressFromStore.AddressDescription = addressToPatch.AddressDescription;
+                addressFromStore.AddressType = addressToPatch.AddressType;
+
+                return AcceptedAtRoute("GetAddress", new { contactId = contactId, addressId = addressFromStore.Id }, addressFromStore);
             }
-
-            var addressFromStore = contact.Addresses!.FirstOrDefault(a => a.Id == addressId);
-            if (addressFromStore == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                _logger.LogCritical(ex.Message);
+                return StatusCode(500, "Something went wrong");
             }
-
-            var addressToPatch = new AddressCreationDto()
-            {
-                AddressDescription = addressFromStore.AddressDescription,
-                AddressType = addressFromStore.AddressType,
-            };
-
-            addressToUpdatePatchDocument.ApplyTo(addressToPatch, ModelState);
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            if (!TryValidateModel(addressToPatch))
-            {
-                return BadRequest(ModelState);
-            }
-            addressFromStore.AddressDescription = addressToPatch.AddressDescription;
-            addressFromStore.AddressType = addressToPatch.AddressType;
-
-            return AcceptedAtRoute("GetAddress", new { contactId = contactId, addressId = addressFromStore.Id }, addressFromStore);
         }
 
         [HttpDelete("{addressId}")]
         public async Task<IActionResult> DeleteAddress(int contactId, int addressId)
         {
-            var contact = ContactsDataStore.Current.Contacts.FirstOrDefault(c => c.Id == contactId);
-            if (contact == null)
+            try
             {
-                return NotFound();
+                var contact = ContactsDataStore.Current.Contacts.FirstOrDefault(c => c.Id == contactId);
+                if (contact == null)
+                {
+                    _logger.LogInformation($"Contact with id {contactId} was not found when accessing Contacts.");
+                    return NotFound();
+                }
+                var addressFromStore = contact.Addresses!.FirstOrDefault(a => a.Id == addressId);
+                if (addressFromStore == null)
+                {
+                    _logger.LogInformation($"Address with id {addressId} was not found when accessing Contact with id {contactId}.");
+                    return NotFound();
+                }
+                contact.Addresses!.Remove(addressFromStore);
+                return Ok();
             }
-            var addressFromStore = contact.Addresses!.FirstOrDefault(a => a.Id == addressId);
-            if (addressFromStore == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                _logger.LogCritical(ex.Message);
+                return StatusCode(500, "Something went wrong");
             }
-            contact.Addresses!.Remove(addressFromStore);
-            return Ok();
         }
     }
 }
