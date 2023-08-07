@@ -1,102 +1,115 @@
-﻿using System.Collections.Generic;
-using ContactInformation.WebAPI.Models;
+﻿using ContactInformation.WebAPI.Models;
+using System;
+using System.Collections.Generic;
 
 namespace ContactInformation.WebAPI
 {
     public class ContactsDataStore
     {
         public List<Contact> Contacts { get; set; }
-        public static ContactsDataStore Current { get; set; } = new ContactsDataStore();
+        public List<User> Users { get; set; }
+        public static ContactsDataStore Current { get; } = new ContactsDataStore();
 
         public ContactsDataStore()
         {
-            Contacts = new List<Contact>()
+            Users = new List<User>()
             {
-                new Contact()
+                new User()
                 {
-                    Id = 1,
-                    FirstName = "Charis Arlie",
-                    LastName = "Baclayon",
-                    Addresses = new List<Address>()
+                    FirstName = "John",
+                    LastName = "Doe",
+                    Username = "johndoe",
+                    PasswordHash = new byte[0], // Replace with the actual password hash
+                    PasswordSalt = new byte[0], // Replace with the actual password salt
+                    Contacts = new List<Contact>()
                     {
-                        new Address()
+                        new Contact()
                         {
-                            Id = 1,
-                            AddressDescription = "Guadalupe",
-                            AddressType = AddressType.Delivery.ToString(),
-                            ContactId = 1
-                        },
-                        new Address()
-                        {
-                            Id = 2,
-                            AddressDescription = "Guadalupe",
-                            AddressType = "Billing",
-                            ContactId = 1
+                            FirstName = "Charis Arlie",
+                            LastName = "Baclayon",
+                            Addresses = new List<Address>()
+                            {
+                                new Address()
+                                {
+                                    AddressDescription = "Guadalupe",
+                                    AddressType = "Delivery",
+                                },
+                                new Address()
+                                {
+                                    AddressDescription = "Guadalupe",
+                                    AddressType = "Work"
+                                }
+                            },
+                            PhoneNumber = "1234567890",
+                            EmailAddress = "charis.arlie@example.com",
+                            BirthDate = new DateTime(1995, 5, 20),
+                            Favorite = true,
                         }
-                    },
-                    PhoneNumber = "1234567890",
-                    EmailAddress = "charis.arlie@example.com",
-                    BirthDate = new DateTime(1995, 5, 20),
-                    Favorite = true,
-                    UserId = 1
+                    }
                 },
-                new Contact()
+                new User()
                 {
-                    Id = 2,
-                    FirstName = "Leonel Christie",
-                    LastName = "Baclayon",
-                    Addresses = new List<Address>()
+                    FirstName = "Jane",
+                    LastName = "Smith",
+                    Username = "janesmith",
+                    PasswordHash = new byte[0], // Replace with the actual password hash
+                    PasswordSalt = new byte[0], // Replace with the actual password salt
+                    Contacts = new List<Contact>()
                     {
-                        new Address()
+                        new Contact()
                         {
-                            Id = 3,
-                            AddressDescription = "Guadalupe",
-                            AddressType = "Delivery",
-                            ContactId = 2
+                            FirstName = "Leonel Christie",
+                            LastName = "Baclayon",
+                            Addresses = new List<Address>()
+                            {
+                                new Address()
+                                {
+                                    AddressDescription = "Guadalupe",
+                                    AddressType = "Delivery"
+                                },
+                                new Address()
+                                {
+                                    AddressDescription = "Guadalupe",
+                                    AddressType = "Billing"
+                                }
+                            },
+                            PhoneNumber = "987654321",
+                            EmailAddress = "leonel.christie@example.com",
+                            BirthDate = new DateTime(1998, 8, 15),
+                            Favorite = false,
                         },
-                        new Address()
+                        new Contact()
                         {
-                            Id = 4,
-                            AddressDescription = "Guadalupe",
-                            AddressType = "Billing",
-                            ContactId = 2
+                            FirstName = "Grace Christian",
+                            LastName = "Baclayon",
+                            Addresses = new List<Address>()
+                            {
+                                new Address()
+                                {
+                                    AddressDescription = "Guadalupe",
+                                    AddressType = "Delivery"
+                                },
+                                new Address()
+                                {
+                                    AddressDescription = "Guadalupe",
+                                    AddressType = "Billing"
+                                }
+                            },
+                            PhoneNumber = "5555555555",
+                            EmailAddress = "grace.christian@example.com",
+                            BirthDate = new DateTime(2000, 10, 5),
+                            Favorite = true,
                         }
-                    },
-                    PhoneNumber = "987654321",
-                    EmailAddress = "leonel.christie@example.com",
-                    BirthDate = new DateTime(1998, 8, 15),
-                    Favorite = false,
-                    UserId = 2
-                },
-                new Contact()
-                {
-                    Id = 3,
-                    FirstName = "Grace Christian",
-                    LastName = "Baclayon",
-                    Addresses = new List<Address>()
-                    {
-                        new Address()
-                        {
-                            Id = 5,
-                            AddressDescription = "Guadalupe",
-                            AddressType = "Delivery",
-                            ContactId = 3
-                        },
-                        new Address()
-                        {
-                            Id = 6,
-                            AddressDescription = "Guadalupe",
-                            AddressType = "Billing",
-                            ContactId = 3
-                        }
-                    },
-                    PhoneNumber = "5555555555",
-                    EmailAddress = "grace.christian@example.com",
-                    BirthDate = new DateTime(2000, 10, 5),
-                    Favorite = true,
-                    UserId = 3
+                    }
                 },
             };
+
+            // Combine all contacts into a single list
+            Contacts = new List<Contact>();
+            foreach (var user in Users)
+            {
+                Contacts.AddRange(user.Contacts);
+            }
         }
     }
 }

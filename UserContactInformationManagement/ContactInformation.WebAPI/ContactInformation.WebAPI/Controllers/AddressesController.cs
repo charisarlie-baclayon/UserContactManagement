@@ -1,4 +1,4 @@
-﻿using ContactInformation.WebAPI.Dtos;
+﻿using ContactInformation.WebAPI.Dtos.Address;
 using ContactInformation.WebAPI.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;

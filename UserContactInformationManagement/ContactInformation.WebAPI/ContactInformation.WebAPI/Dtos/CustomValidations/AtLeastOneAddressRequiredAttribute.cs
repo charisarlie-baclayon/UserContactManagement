@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using ContactInformation.WebAPI.Dtos.Address;
 
 namespace ContactInformation.WebAPI.Dtos.CustomValidations
 {

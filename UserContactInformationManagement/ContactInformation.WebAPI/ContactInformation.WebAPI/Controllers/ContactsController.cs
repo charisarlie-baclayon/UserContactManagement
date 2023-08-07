@@ -1,4 +1,4 @@
-﻿using ContactInformation.WebAPI.Dtos;
+﻿using ContactInformation.WebAPI.Dtos.Contact;
 using ContactInformation.WebAPI.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -140,7 +140,7 @@ namespace ContactInformation.WebAPI.Controllers
                                 AddressDescription = addressUpdate.AddressDescription,
                                 AddressType = addressUpdate.AddressType
                             };
-                            contactFromStore.Addresses.Add(newAddress);
+                            contactFromStore.Addresses!.Add(newAddress);
                         }
                     }
                 }

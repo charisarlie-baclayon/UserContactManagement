@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace ContactInformation.WebAPI.Dtos
+namespace ContactInformation.WebAPI.Dtos.Address
 {
     public class AddressCreationDto
     {
