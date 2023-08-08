@@ -108,6 +108,9 @@ void ConfigureServices(IServiceCollection services)
             };
         });
 
+    // Register HttpContextAccessor
+    services.AddHttpContextAccessor();
+
     // Register AutoMapper
     services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
