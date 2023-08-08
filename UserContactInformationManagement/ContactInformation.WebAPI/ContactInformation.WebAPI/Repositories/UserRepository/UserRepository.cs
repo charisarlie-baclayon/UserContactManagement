@@ -1,6 +1,7 @@
 ﻿using ContactInformation.WebAPI.Context;
 using ContactInformation.WebAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 
 namespace ContactInformation.WebAPI.Repositories.UserRepository
 {
@@ -72,6 +73,13 @@ namespace ContactInformation.WebAPI.Repositories.UserRepository
                 return true;
             }
             return false;
+        }
+
+        public async Task<User> GetUser(User userToGet)
+        {
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Username.Equals(userToGet.Username));
+            return user!;
         }
     }
 }
