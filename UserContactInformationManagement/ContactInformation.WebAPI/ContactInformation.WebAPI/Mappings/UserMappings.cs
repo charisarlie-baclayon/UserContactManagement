@@ -10,8 +10,10 @@ namespace ContactInformation.WebAPI.Mappings
         {
             CreateMap<UserRegistrationDto, User>();
             CreateMap<UserDto, User>();
+            CreateMap<UserLoginDto, User>();
             CreateMap<User, UserDto>();
             CreateMap<User, UserRegistrationDto>();
+            CreateMap<User, UserLoginDto>();
         }
     }
 }
