@@ -81,7 +81,7 @@ namespace ContactInformation.WebAPI.Repositories.UserRepository
                 .FirstOrDefaultAsync(u => u.Username.Equals(userToGet.Username));
             return user!;
         }
-        public async Task<User> GetUser(int userId)
+        public async Task<User> GetUserById(int userId)
         {
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Id == userId);
