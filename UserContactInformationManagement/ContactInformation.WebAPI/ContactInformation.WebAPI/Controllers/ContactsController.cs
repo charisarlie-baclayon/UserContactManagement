@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ContactInformation.WebAPI.Controllers
 {
-    [Route("api/users/{userId}/contacts")]
+    [Route("api/[controller]")]
     [ApiController]
     [Authorize]
     public class ContactsController : ControllerBase
@@ -18,12 +18,11 @@ namespace ContactInformation.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetContacts(int userId)
+        public async Task<IActionResult> GetContacts()
         {
             try
             {
-                var userContacts = ContactsDataStore.Current.Contacts
-                    .Where(c => c.UserId == userId).ToList();
+                var userContacts = ContactsDataStore.Current.Contacts.ToList();
                 if (userContacts.Any())
                 {
                     _logger.LogInformation($"Contacts were not found when accessing Contacts.");
@@ -39,12 +38,12 @@ namespace ContactInformation.WebAPI.Controllers
         }
 
         [HttpGet("{contactId}", Name = "GetContact")]
-        public async Task<IActionResult> GetContact(int userId, int contactId)
+        public async Task<IActionResult> GetContact(int contactId)
         {
             try
             {
                 var contactToReturn = ContactsDataStore.Current.Contacts
-                    .FirstOrDefault(c => c.UserId == userId && c.Id == contactId);
+                    .FirstOrDefault(c => c.Id == contactId);
                 if (contactToReturn == null)
                 {
                     _logger.LogInformation($"Contact with id {contactId} was not found when accessing Contacts.");
@@ -60,12 +59,11 @@ namespace ContactInformation.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateContact(int userId, [FromBody] ContactCreationDto contactToCreate)
+        public async Task<IActionResult> CreateContact([FromBody] ContactCreationDto contactToCreate)
         {
             try
             {
-                var userContacts = ContactsDataStore.Current.Contacts
-                    .Where(c => c.UserId == userId).ToList();
+                var userContacts = ContactsDataStore.Current.Contacts.ToList();
                 var maxContactId = ContactsDataStore.Current.Contacts.Max(c => c.Id);
 
                 var newContact = new Contact()
@@ -96,7 +94,7 @@ namespace ContactInformation.WebAPI.Controllers
                 }
                 ContactsDataStore.Current.Contacts.Add(newContact);
 
-                return CreatedAtRoute("GetContact", new { userId = newContact.UserId, contactId = newContact.Id }, newContact);
+                return CreatedAtRoute("GetContact", new {contactId = newContact.Id }, newContact);
             }
             catch (Exception ex)
             {
@@ -108,12 +106,12 @@ namespace ContactInformation.WebAPI.Controllers
 
         //need to clean
         [HttpPut("{contactId}")]
-        public async Task<IActionResult> UpdateContact(int userId, int contactId, [FromBody] ContactUpdationDto contactToUpdate)
+        public async Task<IActionResult> UpdateContact(int contactId, [FromBody] ContactUpdationDto contactToUpdate)
         {
             try
             {
                 var contactFromStore = ContactsDataStore.Current.Contacts
-                    .FirstOrDefault(c => c.UserId == userId && c.Id == contactId);
+                    .FirstOrDefault(c => c.Id == contactId);
                 if (contactFromStore == null)
                 {
                     return NotFound();
@@ -154,7 +152,7 @@ namespace ContactInformation.WebAPI.Controllers
                     }
                 }
 
-                return AcceptedAtRoute("GetContact", new { userId = contactFromStore.UserId, contactId = contactFromStore.Id }, contactFromStore);
+                return AcceptedAtRoute("GetContact", new { contactId = contactFromStore.Id }, contactFromStore);
             }
             catch (Exception ex)
             {
@@ -164,12 +162,12 @@ namespace ContactInformation.WebAPI.Controllers
         }
 
         [HttpDelete("{contactId}")]
-        public async Task<IActionResult> DeleteContact(int userId, int contactId)
+        public async Task<IActionResult> DeleteContact(int contactId)
         {
             try
             {
                 var contactToDelete = ContactsDataStore.Current.Contacts
-                    .FirstOrDefault(c => c.UserId == userId && c.Id == contactId);
+                    .FirstOrDefault(c => c.Id == contactId);
                 if (contactToDelete == null)
                 {
                     _logger.LogInformation($"Contact with id {contactId} was not found when accessing Contacts.");

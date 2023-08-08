@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ContactInformation.WebAPI.Controllers
 {
-    [Route("api/users/{userId}/Contacts/{contactId}/[controller]")]
+    [Route("api/contacts/{contactId}/[controller]")]
     [ApiController]
     [Authorize]
     public class AddressesController : ControllerBase
