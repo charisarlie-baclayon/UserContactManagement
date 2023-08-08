@@ -43,7 +43,7 @@ namespace ContactInformation.WebAPI.Repositories.ContactRepository
         {
             var contact = await _context.Contacts
                 .FirstOrDefaultAsync(c => c.UserId == userId && c.Id == contactToUpdate.Id);
-            if (contact != null)
+            if (contact == null)
             {
                 return null!;
             }
@@ -67,7 +67,7 @@ namespace ContactInformation.WebAPI.Repositories.ContactRepository
             var contact = await _context.Contacts
                 .FirstOrDefaultAsync(c => c.UserId == userId && c.Id == contactId);
 
-            if (contact != null)
+            if (contact == null)
             {
                 return false;
             }
