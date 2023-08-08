@@ -8,7 +8,8 @@ namespace ContactInformation.WebAPI.Services.UserService
         Task<UserDto> GetUserByToken(string token);
         Task<User> GetUser(User userToGet);
         Task<int> CreateUser(User newUser);
-        Task<UserDto> UpdateUser(string token, UserRegistrationDto userToUpdate);
+        Task<UserDto> UpdateUser(int userId, UserRegistrationDto userToUpdate);
         Task<bool> DeleteUser(int userId);
+        Task<int> GetUserId();
     }
 }

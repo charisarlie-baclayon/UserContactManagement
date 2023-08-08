@@ -3,6 +3,7 @@ using ContactInformation.WebAPI.Dtos.User;
 using ContactInformation.WebAPI.Exceptions;
 using ContactInformation.WebAPI.Models;
 using ContactInformation.WebAPI.Repositories.UserRepository;
+using System.Security.Claims;
 using System.Security.Cryptography;
 
 namespace ContactInformation.WebAPI.Services.UserService
@@ -11,11 +12,13 @@ namespace ContactInformation.WebAPI.Services.UserService
     {
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserService(IMapper mapper, IUserRepository userRepository)
+        public UserService(IMapper mapper, IUserRepository userRepository, IHttpContextAccessor httpContextAccessor)
         {
             _mapper = mapper;
             _userRepository = userRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<int> CreateUser(User newUser)
         {
@@ -71,6 +74,22 @@ namespace ContactInformation.WebAPI.Services.UserService
             }
 
             return _mapper.Map<UserDto>(newUserResponse);
+        }
+
+        public async Task<int> GetUserId()
+        {
+            var result = _httpContextAccessor.HttpContext!.User.Identity as ClaimsIdentity;
+            if(result == null)
+            {
+                return 0;
+            }
+            var userClaims = result.Claims;
+            var user = new User
+            {
+                Username = userClaims.FirstOrDefault(u => u.Type == ClaimTypes.Name)?.Value,
+                Id = Convert.ToInt32(userClaims.FirstOrDefault(u => u.Type == "Id")?.Value)
+            };
+            return user.Id;
         }
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
