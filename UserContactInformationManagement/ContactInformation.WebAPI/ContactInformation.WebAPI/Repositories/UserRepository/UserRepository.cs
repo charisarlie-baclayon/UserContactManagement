@@ -45,6 +45,8 @@ namespace ContactInformation.WebAPI.Repositories.UserRepository
             user.FirstName = updateUser.FirstName;
             user.LastName = updateUser.LastName;
             user.Username = updateUser.Username;
+            user.PasswordHash = updateUser.PasswordHash;
+            user.PasswordSalt = updateUser.PasswordSalt;
 
             var result = await _context.SaveChangesAsync();
             if (result > 0)
