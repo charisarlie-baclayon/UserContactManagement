@@ -13,23 +13,19 @@ namespace ContactInformation.WebAPI.Repositories.ContactRepository
             _context = context;
         }
 
-        //public async Task<User> GetUserByToken(string token)
-        //{
-        //    var user = await _context.Users.FirstOrDefaultAsync(
-        //        (e) => e.Username.Equals(token));
-        //    return user!;
-        //}
-
         public async Task<IEnumerable<Contact>> GetContacts(int userId)
         {
             var contacts = await _context.Contacts
-                .Where(c => c.UserId == userId).ToListAsync();
+                .Where(c => c.UserId == userId)
+                .Include(c => c.Addresses) // Include Addresses
+                .ToListAsync();
             return contacts;
         }
 
         public async Task<Contact> GetContact(int userId, int contactId)
         {
             var contact = await _context.Contacts
+                .Include(c => c.Addresses)
                 .FirstOrDefaultAsync(c => c.UserId == userId && c.Id == contactId);
             return contact!;
         }
