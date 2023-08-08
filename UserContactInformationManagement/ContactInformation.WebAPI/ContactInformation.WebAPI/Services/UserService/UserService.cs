@@ -37,6 +37,12 @@ namespace ContactInformation.WebAPI.Services.UserService
             return _mapper.Map<UserDto>(user);
         }
 
+        public async Task<User> GetUser(User userToGet)
+        {
+            var user = await _userRepository.GetUser(userToGet);
+            return user;
+        }
+
         public async Task<UserDto> UpdateUser(string token, UserRegistrationDto userToUpdate)
         {
             var user = await _userRepository.GetUserByToken(token);
