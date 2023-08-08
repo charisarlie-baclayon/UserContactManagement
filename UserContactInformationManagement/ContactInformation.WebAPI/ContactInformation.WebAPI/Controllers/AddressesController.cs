@@ -1,5 +1,7 @@
 ﻿using ContactInformation.WebAPI.Dtos.Address;
+using ContactInformation.WebAPI.Exceptions;
 using ContactInformation.WebAPI.Models;
+using ContactInformation.WebAPI.Services.AddressService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,29 +13,25 @@ namespace ContactInformation.WebAPI.Controllers
     public class AddressesController : ControllerBase
     {
         private readonly ILogger<AddressesController> _logger;
+        private readonly IAddressService _addressService;
 
-        public AddressesController(ILogger<AddressesController> logger)
+        public AddressesController(ILogger<AddressesController> logger, IAddressService addressService)
         {
             _logger = logger;
+            _addressService = addressService;
         }
         [HttpGet]
         public async Task<IActionResult> GetAddresses(int contactId)
         {
             try
             {
-                var contact = ContactsDataStore.Current.Contacts.FirstOrDefault(c => c.Id == contactId);
-                if (contact == null)
-                {
-                    _logger.LogInformation($"Contact with id {contactId} was not found when accessing Contacts.");
-                    return NotFound();
-                }
-                var addresses = contact.Addresses!.ToList();
-                if (addresses.Any())
-                {
-                    _logger.LogInformation($"Addresses were not found when accessing Contact with id {contactId}.");
-                    return NotFound();
-                }
+                var addresses = await _addressService.GetAddresses(contactId);
                 return Ok(addresses);
+            }
+            catch (ContactNotFoundException ex)
+            {
+                _logger.LogInformation(ex.Message);
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {
@@ -47,19 +45,18 @@ namespace ContactInformation.WebAPI.Controllers
         {
             try
             {
-                var contact = ContactsDataStore.Current.Contacts.FirstOrDefault(c => c.Id == contactId);
-                if (contact == null)
-                {
-                    _logger.LogInformation($"Contact with id {contactId} was not found when accessing Contacts.");
-                    return NotFound();
-                }
-                var addressToReturn = contact.Addresses!.FirstOrDefault(a => a.Id == addressId);
-                if (addressToReturn == null)
-                {
-                    _logger.LogInformation($"Address with id {addressId} was not found when accessing Contact with id {contactId}.");
-                    return NotFound();
-                }
-                return Ok(addressToReturn);
+                var address = await _addressService.GetAddress(contactId, addressId);
+                return Ok(address);
+            }
+            catch (ContactNotFoundException ex)
+            {
+                _logger.LogInformation(ex.Message);
+                return NotFound(ex.Message);
+            }
+            catch (AddressNotFoundException ex)
+            {
+                _logger.LogInformation(ex.Message);
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {
@@ -73,23 +70,18 @@ namespace ContactInformation.WebAPI.Controllers
         {
             try
             {
-                var contact = ContactsDataStore.Current.Contacts.FirstOrDefault(c => c.Id == contactId);
-                if (contact == null)
-                {
-                    _logger.LogInformation($"Contact with id {contactId} was not found when accessing Contacts.");
-                    return NotFound();
-                }
-                var maxAddressId = ContactsDataStore.Current.Contacts.SelectMany(c => c.Addresses!).Max(a => a.Id);
-
-                var newAddress = new Address()
-                {
-                    Id = ++maxAddressId,
-                    AddressDescription = addressToCreate.AddressDescription,
-                    AddressType = addressToCreate.AddressType,
-                };
-                contact.Addresses!.Add(newAddress);
-
-                return CreatedAtRoute("GetAddress", new { contactId = contactId, addressId = newAddress.Id }, newAddress);
+                var addressId = await _addressService.CreateAddress(contactId, addressToCreate);
+                return CreatedAtRoute("GetAddress", new { contactId = contactId, addressId = addressId }, null);
+            }
+            catch (ContactNotFoundException ex)
+            {
+                _logger.LogInformation(ex.Message);
+                return NotFound(ex.Message);
+            }
+            catch (AddressCreationFailedException ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
@@ -103,23 +95,23 @@ namespace ContactInformation.WebAPI.Controllers
         {
             try
             {
-                var contact = ContactsDataStore.Current.Contacts.FirstOrDefault(c => c.Id == contactId);
-                if (contact == null)
-                {
-                    _logger.LogInformation($"Contact with id {contactId} was not found when accessing Contacts.");
-                    return NotFound();
-                }
-                var addressFromStore = contact.Addresses!.FirstOrDefault(a => a.Id == addressId);
-                if (addressFromStore == null)
-                {
-                    _logger.LogInformation($"Address with id {addressId} was not found when accessing Contact with id {contactId}.");
-                    return NotFound();
-                }
-
-                addressFromStore.AddressDescription = addressToUpdate.AddressDescription;
-                addressFromStore.AddressType = addressToUpdate.AddressType;
-
-                return AcceptedAtRoute("GetAddress", new { contactId = contactId, addressId = addressFromStore.Id }, addressFromStore);
+                var updatedAddress = await _addressService.UpdateAddress(contactId, addressId, addressToUpdate);
+                return AcceptedAtRoute("GetAddress", new { contactId = contactId, addressId = updatedAddress.Id }, updatedAddress);
+            }
+            catch (ContactNotFoundException ex)
+            {
+                _logger.LogInformation(ex.Message);
+                return NotFound(ex.Message);
+            }
+            catch (AddressNotFoundException ex)
+            {
+                _logger.LogInformation(ex.Message);
+                return NotFound(ex.Message);
+            }
+            catch (AddressUpdateFailedException ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
@@ -127,73 +119,28 @@ namespace ContactInformation.WebAPI.Controllers
                 return StatusCode(500, "Something went wrong.");
             }
         }
-
-        //[HttpPatch("{addressId}")]
-        //public async Task<IActionResult> PartiallyUpdateAddress(int contactId, int addressId, JsonPatchDocument<AddressCreationDto> addressToUpdatePatchDocument)
-        //{
-        //    try
-        //    {
-        //        var contact = ContactsDataStore.Current.Contacts.FirstOrDefault(c => c.Id == contactId);
-        //        if (contact == null)
-        //        {
-        //            _logger.LogInformation($"Contact with id {contactId} was not found when accessing Contacts.");
-        //            return NotFound();
-        //        }
-
-        //        var addressFromStore = contact.Addresses!.FirstOrDefault(a => a.Id == addressId);
-        //        if (addressFromStore == null)
-        //        {
-        //            _logger.LogInformation($"Address with id {addressId} was not found when accessing Contact with id {contactId}.");
-        //            return NotFound();
-        //        }
-
-        //        var addressToPatch = new AddressCreationDto()
-        //        {
-        //            AddressDescription = addressFromStore.AddressDescription,
-        //            AddressType = addressFromStore.AddressType,
-        //        };
-
-        //        addressToUpdatePatchDocument.ApplyTo(addressToPatch, ModelState);
-
-        //        if (!ModelState.IsValid)
-        //        {
-        //            return BadRequest(ModelState);
-        //        }
-        //        if (!TryValidateModel(addressToPatch))
-        //        {
-        //            return BadRequest(ModelState);
-        //        }
-        //        addressFromStore.AddressDescription = addressToPatch.AddressDescription;
-        //        addressFromStore.AddressType = addressToPatch.AddressType;
-
-        //        return AcceptedAtRoute("GetAddress", new { contactId = contactId, addressId = addressFromStore.Id }, addressFromStore);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogCritical(ex.Message);
-        //        return StatusCode(500, "Something went wrong");
-        //    }
-        //}
-
+        
         [HttpDelete("{addressId}")]
         public async Task<IActionResult> DeleteAddress(int contactId, int addressId)
         {
             try
             {
-                var contact = ContactsDataStore.Current.Contacts.FirstOrDefault(c => c.Id == contactId);
-                if (contact == null)
+                var deleted = await _addressService.DeleteAddress(contactId, addressId);
+                if (deleted)
                 {
-                    _logger.LogInformation($"Contact with id {contactId} was not found when accessing Contacts.");
-                    return NotFound();
+                    return Ok();
                 }
-                var addressFromStore = contact.Addresses!.FirstOrDefault(a => a.Id == addressId);
-                if (addressFromStore == null)
-                {
-                    _logger.LogInformation($"Address with id {addressId} was not found when accessing Contact with id {contactId}.");
-                    return NotFound();
-                }
-                contact.Addresses!.Remove(addressFromStore);
-                return Ok();
+                return NotFound();
+            }
+            catch (ContactNotFoundException ex)
+            {
+                _logger.LogInformation(ex.Message);
+                return NotFound(ex.Message);
+            }
+            catch (AddressDeletionFailedException ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
