@@ -3,10 +3,8 @@ using ContactInformation.WebAPI.Dtos.User;
 using ContactInformation.WebAPI.Exceptions;
 using ContactInformation.WebAPI.Models;
 using ContactInformation.WebAPI.Services.UserService;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Security.Cryptography;
 
@@ -30,7 +28,7 @@ namespace ContactInformation.WebAPI.Services.AuthenticationService
             var userModel = _mapper.Map<User>(userRegistrationDto);
             var userCheck = await _userService.GetUser(userModel);
 
-            if(userCheck != null)
+            if (userCheck != null)
             {
                 throw new UserAlreadyExistsException("User already exists.");
             }
@@ -47,7 +45,7 @@ namespace ContactInformation.WebAPI.Services.AuthenticationService
 
             var newUserId = await _userService.CreateUser(newUserModel);
 
-            if(newUserId == 0)
+            if (newUserId == 0)
             {
                 throw new Exception("Error creating user.");
             }
@@ -65,7 +63,7 @@ namespace ContactInformation.WebAPI.Services.AuthenticationService
                 throw new InvalidCredentialsException("Invalid credentials.");
             }
 
-            if(!VerifyPasswordHash(userLoginDto.Password, user.PasswordHash, user.PasswordSalt))
+            if (!VerifyPasswordHash(userLoginDto.Password, user.PasswordHash, user.PasswordSalt))
             {
                 throw new UnauthorizedAccessException("Incorrect password.");
             }
@@ -94,7 +92,8 @@ namespace ContactInformation.WebAPI.Services.AuthenticationService
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.Username)
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
