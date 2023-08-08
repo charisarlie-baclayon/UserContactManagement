@@ -1,6 +1,8 @@
 using ContactInformation.WebAPI.Context;
 using ContactInformation.WebAPI.Repositories.AddressRepository;
 using ContactInformation.WebAPI.Repositories.ContactRepository;
+using ContactInformation.WebAPI.Services.ContactService;
+using ContactInformation.WebAPI.Services.UserService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -104,7 +106,14 @@ void ConfigureServices(IServiceCollection services)
             };
         });
 
+    // Register AutoMapper
+    services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
     // Register Repositories
     services.AddScoped<IContactRepository, ContactRepository>();
     services.AddScoped<IAddressRepository, AddressRepository>();
+
+    // Register Services
+    services.AddScoped<IUserService, UserService>();
+    services.AddScoped<IContactService, ContactService>();
 }
