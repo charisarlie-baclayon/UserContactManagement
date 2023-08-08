@@ -87,7 +87,7 @@ namespace ContactInformation.WebAPI.Services.UserService
             var user = new User
             {
                 Username = userClaims.FirstOrDefault(u => u.Type == ClaimTypes.Name)?.Value,
-                Id = Convert.ToInt32(userClaims.FirstOrDefault(u => u.Type == "Id")?.Value)
+                Id = Convert.ToInt32(userClaims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier)?.Value)
             };
             return user.Id;
         }
