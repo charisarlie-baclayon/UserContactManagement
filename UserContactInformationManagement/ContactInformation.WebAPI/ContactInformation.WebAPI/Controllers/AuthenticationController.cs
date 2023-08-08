@@ -1,5 +1,7 @@
 ﻿using ContactInformation.WebAPI.Dtos.User;
+using ContactInformation.WebAPI.Exceptions;
 using ContactInformation.WebAPI.Models;
+using ContactInformation.WebAPI.Services.AuthenticationService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -13,93 +15,68 @@ namespace ContactInformation.WebAPI.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        public static User user = new User();
         private readonly ILogger<AuthenticationController> _logger;
-        private readonly IConfiguration _configuration;
+        private readonly IAuthenticationService _authenticationService;
 
-        public AuthenticationController(ILogger<AuthenticationController> logger, IConfiguration configuration)
+        public AuthenticationController(ILogger<AuthenticationController> logger, IAuthenticationService authenticationService)
         {
             _logger = logger;
-            _configuration = configuration;
-        }
-
-        [HttpGet, Authorize]
-        public  ActionResult<string> GetUserIdentity()
-        {
-            var userName = User?.Identity?.Name;
-            return Ok(userName);
+            _authenticationService = authenticationService;
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserRegistrationDto userRegistrationDto)
         {
-            CreatePasswordHash(userRegistrationDto.Password, out byte[] passwordHash, out byte[] passwordSalt);
-
-            user.FirstName = userRegistrationDto.FirstName;
-            user.LastName = userRegistrationDto.LastName;
-            user.Username = userRegistrationDto.Username;
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
-
-            return Ok(user);
+            try
+            {
+                var newUser = await _authenticationService.Register(userRegistrationDto);
+                if (newUser == null)
+                {
+                    _logger.LogInformation($"Registration unsuccessful due to null return.");
+                    return BadRequest();
+                }
+                return Ok(newUser);
+            }
+            catch (UserAlreadyExistsException ex)
+            {
+                _logger.LogError($"User already exists. Unsuccessful registration.");
+                return Conflict(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500, "Something went wrong.");
+            }
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(UserLoginDto userDto)
+        public async Task<IActionResult> Login(UserLoginDto userLoginDto)
         {
-            // TODO: I-usa ra ang username not found and password verification for good practice :D
-
-            if(user.Username != userDto.Username)
+            try
             {
-                _logger.LogInformation($"User with username {userDto.Username} was not found when accessing Users.");
-                return BadRequest("User not found.");
+                var token = await _authenticationService.Login(userLoginDto);
+                if (token == null)
+                {
+                    _logger.LogInformation($"Login unsuccessful due to invalid credentials.");
+                    return Unauthorized("Invalid credentials.");
+                }
+
+                return Ok(token);
             }
-
-            if (!VerifyPasswordHash(userDto.Password, user.PasswordHash, user.PasswordSalt))
+            catch (InvalidCredentialsException ex)
             {
-                _logger.LogInformation($"Incorrect username or password for user {userDto.Username}.");
-                return BadRequest("Incorrect username or passowrd.");
+                _logger.LogWarning($"Invalid credentials provided.");
+                return Unauthorized(ex.Message);
             }
-
-            string token = CreateToken(user);
-            return Ok(token);
-        }
-
-        private string CreateToken(User user)
-        {
-            List<Claim> claims = new List<Claim>
+            catch (UnauthorizedAccessException ex)
             {
-                new Claim(ClaimTypes.Name, user.Username)
-            };
-
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
-                _configuration.GetSection("Jwt:Key").Value));
-
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-            var token = new JwtSecurityToken(claims: claims,
-                expires: DateTime.Now.AddDays(1),
-                signingCredentials: creds);
-
-            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-            return jwt;
-        }
-
-        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
-        {
-            using (var hmac = new HMACSHA512())
-            {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                _logger.LogWarning($"Unauthorized access.");
+                return Unauthorized(ex.Message);
             }
-        }
-
-        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
-        {
-            using (var hmac = new HMACSHA512(passwordSalt))
+            catch (Exception ex)
             {
-                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-                return computedHash.SequenceEqual(passwordHash);
+                _logger.LogError(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
     }
