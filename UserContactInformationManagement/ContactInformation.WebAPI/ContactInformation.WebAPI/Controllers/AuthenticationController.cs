@@ -45,7 +45,7 @@ namespace ContactInformation.WebAPI.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(UserDto userDto)
+        public async Task<IActionResult> Login(UserLoginDto userDto)
         {
             // TODO: I-usa ra ang username not found and password verification for good practice :D
 
