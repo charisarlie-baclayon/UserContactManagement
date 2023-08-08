@@ -9,10 +9,12 @@ namespace ContactInformation.WebAPI.Mappings
         public ContactMappings()
         {
             CreateMap<ContactCreationDto, Contact>();
-            CreateMap<ContactDto, Contact>();
+            CreateMap<ContactDto, Contact>()
+                .ForMember(dest => dest.Addresses, opt => opt.MapFrom(src => src.Addresses));
             CreateMap<ContactUpdationDto, Contact>();
             CreateMap<Contact, ContactCreationDto>();
-            CreateMap<Contact, ContactDto>();
+            CreateMap<Contact, ContactDto>()
+                .ForMember(dest => dest.Addresses, opt => opt.MapFrom(src => src.Addresses));
             CreateMap<Contact, ContactUpdationDto>();
         }
     }
