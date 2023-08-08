@@ -1,6 +1,5 @@
 ﻿using ContactInformation.WebAPI.Dtos.Address;
 using ContactInformation.WebAPI.Dtos.CustomValidations;
-using ContactInformation.WebAPI.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace ContactInformation.WebAPI.Dtos.Contact

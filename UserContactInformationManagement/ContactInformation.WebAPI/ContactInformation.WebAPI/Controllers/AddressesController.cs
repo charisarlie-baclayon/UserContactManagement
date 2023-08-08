@@ -1,12 +1,13 @@
 ﻿using ContactInformation.WebAPI.Dtos.Address;
 using ContactInformation.WebAPI.Models;
-using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ContactInformation.WebAPI.Controllers
 {
-    [Route("api/Contacts/{contactId}/[controller]")]
+    [Route("api/users/{userId}/Contacts/{contactId}/[controller]")]
     [ApiController]
+    [Authorize]
     public class AddressesController : ControllerBase
     {
         private readonly ILogger<AddressesController> _logger;

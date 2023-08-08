@@ -1,4 +1,4 @@
-﻿namespace ContactInformation.WebAPI.Repository.AddressRepository
+﻿namespace ContactInformation.WebAPI.Repositories.AddressRepository
 {
     public class AddressRepository :IAddressRepository
     {

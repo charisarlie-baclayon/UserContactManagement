@@ -1,9 +1,7 @@
 ﻿using ContactInformation.WebAPI.Dtos.User;
 using ContactInformation.WebAPI.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.CodeDom.Compiler;
 
 namespace ContactInformation.WebAPI.Controllers
 {

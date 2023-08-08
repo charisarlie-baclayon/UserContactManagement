@@ -1,6 +1,4 @@
-﻿using ContactInformation.WebAPI.Models;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ContactInformation.WebAPI.Dtos.Address
 {

@@ -1,12 +1,10 @@
 ﻿using ContactInformation.WebAPI.Dtos.User;
 using ContactInformation.WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace ContactInformation.WebAPI.Controllers
 {

@@ -1,7 +1,6 @@
 ﻿using ContactInformation.WebAPI.Dtos.Contact;
 using ContactInformation.WebAPI.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ContactInformation.WebAPI.Controllers
