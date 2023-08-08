@@ -1,6 +1,8 @@
 using ContactInformation.WebAPI.Context;
 using ContactInformation.WebAPI.Repositories.AddressRepository;
 using ContactInformation.WebAPI.Repositories.ContactRepository;
+using ContactInformation.WebAPI.Repositories.UserRepository;
+using ContactInformation.WebAPI.Services.AuthenticationService;
 using ContactInformation.WebAPI.Services.ContactService;
 using ContactInformation.WebAPI.Services.UserService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -100,7 +102,7 @@ void ConfigureServices(IServiceCollection services)
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
-                    .GetBytes(builder.Configuration.GetSection("Jwt:Key").Value)),
+                    .GetBytes(builder.Configuration.GetSection("Jwt:Key").Value!)),
                 ValidateIssuer = false,
                 ValidateAudience = false
             };
@@ -110,10 +112,12 @@ void ConfigureServices(IServiceCollection services)
     services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
     // Register Repositories
+    services.AddScoped<IUserRepository, UserRepository>();
     services.AddScoped<IContactRepository, ContactRepository>();
     services.AddScoped<IAddressRepository, AddressRepository>();
 
     // Register Services
     services.AddScoped<IUserService, UserService>();
+    services.AddScoped<IAuthenticationService, AuthenticationService>();
     services.AddScoped<IContactService, ContactService>();
 }
