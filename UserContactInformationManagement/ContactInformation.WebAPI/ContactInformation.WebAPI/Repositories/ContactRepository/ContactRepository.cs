@@ -13,6 +13,13 @@ namespace ContactInformation.WebAPI.Repositories.ContactRepository
             _context = context;
         }
 
+        //public async Task<User> GetUserByToken(string token)
+        //{
+        //    var user = await _context.Users.FirstOrDefaultAsync(
+        //        (e) => e.Username.Equals(token));
+        //    return user!;
+        //}
+
         public async Task<IEnumerable<Contact>> GetContacts(int userId)
         {
             var contacts = await _context.Contacts

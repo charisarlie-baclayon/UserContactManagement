@@ -4,6 +4,7 @@ namespace ContactInformation.WebAPI.Repositories.ContactRepository
 {
     public interface IContactRepository
     {
+        //Task<User> GetUserByToken(string token);
         Task<IEnumerable<Contact>> GetContacts(int userId);
         Task<Contact> GetContact(int userId, int contactId);
         Task<int> CreateContact(int userId, Contact contactToAdd);
