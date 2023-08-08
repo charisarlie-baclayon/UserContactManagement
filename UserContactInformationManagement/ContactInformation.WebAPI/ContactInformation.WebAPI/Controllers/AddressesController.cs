@@ -127,52 +127,52 @@ namespace ContactInformation.WebAPI.Controllers
             }
         }
 
-        [HttpPatch("{addressId}")]
-        public async Task<IActionResult> PartiallyUpdateAddress(int contactId, int addressId, JsonPatchDocument<AddressCreationDto> addressToUpdatePatchDocument)
-        {
-            try
-            {
-                var contact = ContactsDataStore.Current.Contacts.FirstOrDefault(c => c.Id == contactId);
-                if (contact == null)
-                {
-                    _logger.LogInformation($"Contact with id {contactId} was not found when accessing Contacts.");
-                    return NotFound();
-                }
+        //[HttpPatch("{addressId}")]
+        //public async Task<IActionResult> PartiallyUpdateAddress(int contactId, int addressId, JsonPatchDocument<AddressCreationDto> addressToUpdatePatchDocument)
+        //{
+        //    try
+        //    {
+        //        var contact = ContactsDataStore.Current.Contacts.FirstOrDefault(c => c.Id == contactId);
+        //        if (contact == null)
+        //        {
+        //            _logger.LogInformation($"Contact with id {contactId} was not found when accessing Contacts.");
+        //            return NotFound();
+        //        }
 
-                var addressFromStore = contact.Addresses!.FirstOrDefault(a => a.Id == addressId);
-                if (addressFromStore == null)
-                {
-                    _logger.LogInformation($"Address with id {addressId} was not found when accessing Contact with id {contactId}.");
-                    return NotFound();
-                }
+        //        var addressFromStore = contact.Addresses!.FirstOrDefault(a => a.Id == addressId);
+        //        if (addressFromStore == null)
+        //        {
+        //            _logger.LogInformation($"Address with id {addressId} was not found when accessing Contact with id {contactId}.");
+        //            return NotFound();
+        //        }
 
-                var addressToPatch = new AddressCreationDto()
-                {
-                    AddressDescription = addressFromStore.AddressDescription,
-                    AddressType = addressFromStore.AddressType,
-                };
+        //        var addressToPatch = new AddressCreationDto()
+        //        {
+        //            AddressDescription = addressFromStore.AddressDescription,
+        //            AddressType = addressFromStore.AddressType,
+        //        };
 
-                addressToUpdatePatchDocument.ApplyTo(addressToPatch, ModelState);
+        //        addressToUpdatePatchDocument.ApplyTo(addressToPatch, ModelState);
 
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-                if (!TryValidateModel(addressToPatch))
-                {
-                    return BadRequest(ModelState);
-                }
-                addressFromStore.AddressDescription = addressToPatch.AddressDescription;
-                addressFromStore.AddressType = addressToPatch.AddressType;
+        //        if (!ModelState.IsValid)
+        //        {
+        //            return BadRequest(ModelState);
+        //        }
+        //        if (!TryValidateModel(addressToPatch))
+        //        {
+        //            return BadRequest(ModelState);
+        //        }
+        //        addressFromStore.AddressDescription = addressToPatch.AddressDescription;
+        //        addressFromStore.AddressType = addressToPatch.AddressType;
 
-                return AcceptedAtRoute("GetAddress", new { contactId = contactId, addressId = addressFromStore.Id }, addressFromStore);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogCritical(ex.Message);
-                return StatusCode(500, "Something went wrong");
-            }
-        }
+        //        return AcceptedAtRoute("GetAddress", new { contactId = contactId, addressId = addressFromStore.Id }, addressFromStore);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogCritical(ex.Message);
+        //        return StatusCode(500, "Something went wrong");
+        //    }
+        //}
 
         [HttpDelete("{addressId}")]
         public async Task<IActionResult> DeleteAddress(int contactId, int addressId)

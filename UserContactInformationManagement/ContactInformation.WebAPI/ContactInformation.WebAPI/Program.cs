@@ -1,8 +1,14 @@
 using ContactInformation.WebAPI.Context;
+using ContactInformation.WebAPI.Repository.AddressRepository;
+using ContactInformation.WebAPI.Repository.ContactRepository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Serilog;
+using Swashbuckle.AspNetCore.Filters;
+using System.Reflection;
+using System.Text;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Debug()
@@ -25,7 +31,29 @@ builder.Services.AddControllers( options =>
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    {
+        Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
+
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
+
+    // Add header documentation in Swagger
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "Contact Information API",
+        Description = "An API for Contact Information Management. Prepared by Charis Arlie L. Baclayon."
+    });
+    // Feed generated xml api docs to swagger
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
 
 // Call ConfigureServices.
 ConfigureServices(builder.Services);
@@ -57,26 +85,26 @@ app.Run();
 void ConfigureServices(IServiceCollection services)
 {
     // Register the DbContext.
-    //services.AddDbContext<ContactInformationDbContext>(dbContextOptions => dbContextOptions.UseSqlite("Da"));
     services.AddDbContext<ContactInformationDbContext>( options =>
     {
         options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
     });
 
-    // Add services for JWT Authentication.
-    //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    //    .AddJwtBearer(options =>
-    //    {
-    //        options.TokenValidationParameters = new TokenValidationParameters
-    //        {
-    //            ValidateIssuer = true,
-    //            ValidateAudience = true,
-    //            ValidateLifetime = true,
-    //            ValidateIssuerSigningKey = true,
-    //            ValidIssuer = Configuration["Jwt:Issuer"],
-    //            ValidAudience = Configuration["Jwt:Audience"],
-    //            IssuerSigningKey = new SymmetricSecurityKey(HeaderEncodingSelector.UTF8.GetBytes(
-    //                Configuration["Jwt:Key"]))
-    //        };
-    //    });
+    // Register JWT Authentication
+    services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
+                    .GetBytes(builder.Configuration.GetSection("Jwt:Key").Value)),
+                ValidateIssuer = false,
+                ValidateAudience = false
+            };
+        });
+
+    // Register Repositories
+    services.AddScoped<IContactRepository, ContactRepository>();
+    services.AddScoped<IAddressRepository, AddressRepository>();
 }

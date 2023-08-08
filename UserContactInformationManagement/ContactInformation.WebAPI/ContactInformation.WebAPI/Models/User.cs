@@ -15,8 +15,6 @@ namespace ContactInformation.WebAPI.Models
         //public string Password { get; set; } = string.Empty;
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
-
-
         public List<Contact> Contacts { get; set; } 
             = new List<Contact>();
 
