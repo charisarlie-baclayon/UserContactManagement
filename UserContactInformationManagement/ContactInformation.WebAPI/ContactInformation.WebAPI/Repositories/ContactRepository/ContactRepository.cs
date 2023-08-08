@@ -23,7 +23,7 @@ namespace ContactInformation.WebAPI.Repositories.ContactRepository
         public async Task<Contact> GetContact(int userId, int contactId)
         {
             var contact = await _context.Contacts
-                .FirstOrDefault(c => c.UserId == userId && c.Id == contactId);
+                .FirstOrDefaultAsync(c => c.UserId == userId && c.Id == contactId);
             return contact;
         }
 
