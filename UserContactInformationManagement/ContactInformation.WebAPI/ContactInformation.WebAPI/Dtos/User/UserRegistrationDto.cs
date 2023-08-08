@@ -16,5 +16,9 @@ namespace ContactInformation.WebAPI.Dtos.User
         [Required(ErrorMessage = "Password is required.")]
         public string Password { get; set; } = string.Empty;
 
+        [Required(ErrorMessage = "Password is required.")]
+        [Compare("Password", ErrorMessage = "Password must match.")]
+        public string ConfirmPassword { get; set; } = string.Empty;
+
     }
 }
