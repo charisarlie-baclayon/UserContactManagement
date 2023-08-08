@@ -1,5 +1,6 @@
 ﻿using ContactInformation.WebAPI.Dtos.User;
 using ContactInformation.WebAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -20,6 +21,13 @@ namespace ContactInformation.WebAPI.Controllers
         {
             _logger = logger;
             _configuration = configuration;
+        }
+
+        [HttpGet, Authorize]
+        public  ActionResult<string> GetUserIdentity()
+        {
+            var userName = User?.Identity?.Name;
+            return Ok(userName);
         }
 
         [HttpPost("register")]
