@@ -33,7 +33,7 @@ namespace ContactInformation.WebAPI.Controllers
             {
                 var userId = await _userService.GetUserId();
                 var contacts = await _contactService.GetContacts(userId);
-                if (contacts.Any())
+                if (!contacts.Any())
                 {
                     _logger.LogInformation($"Contacts were not found when accessing Contacts.");
                     return NotFound();
@@ -76,7 +76,8 @@ namespace ContactInformation.WebAPI.Controllers
                 var userId = await _userService.GetUserId();
 
                 var contactId = await _contactService.CreateContact(userId, contactToCreate);
-                return CreatedAtRoute("GetContact", new { contactId }, null);
+                //return CreatedAtRoute("GetContact", new { contactId }, null);
+                return Ok(await _contactService.GetContact(userId, contactId));
             }
             catch (ContactCreationFailedException ex)
             {
