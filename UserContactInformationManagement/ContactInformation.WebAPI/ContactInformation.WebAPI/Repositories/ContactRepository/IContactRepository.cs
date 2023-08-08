@@ -6,8 +6,8 @@ namespace ContactInformation.WebAPI.Repositories.ContactRepository
     {
         Task<IEnumerable<Contact>> GetContacts(int userId);
         Task<Contact> GetContact(int userId, int contactId);
-        Task<Contact> CreateContact(int userId, Contact contact);
-        Task<Contact> UpdateContact(int userId, Contact contact);
+        Task<int> CreateContact(int userId, Contact contactToAdd);
+        Task<Contact> UpdateContact(int userId, Contact contactToUpdate);
         Task<bool> DeleteContact(int userId, int contactId);
 
     }

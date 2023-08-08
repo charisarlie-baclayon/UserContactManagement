@@ -1,6 +1,6 @@
 using ContactInformation.WebAPI.Context;
-using ContactInformation.WebAPI.Repository.AddressRepository;
-using ContactInformation.WebAPI.Repository.ContactRepository;
+using ContactInformation.WebAPI.Repositories.AddressRepository;
+using ContactInformation.WebAPI.Repositories.ContactRepository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
