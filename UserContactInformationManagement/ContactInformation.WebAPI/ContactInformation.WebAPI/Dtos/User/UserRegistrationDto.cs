@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace ContactInformation.WebAPI.Dtos.User
 {
@@ -14,9 +15,11 @@ namespace ContactInformation.WebAPI.Dtos.User
         public string Username { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Password is required.")]
+        [PasswordPropertyText]
         public string Password { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Password is required.")]
+        [PasswordPropertyText]
         [Compare("Password", ErrorMessage = "Password must match.")]
         public string ConfirmPassword { get; set; } = string.Empty;
 
