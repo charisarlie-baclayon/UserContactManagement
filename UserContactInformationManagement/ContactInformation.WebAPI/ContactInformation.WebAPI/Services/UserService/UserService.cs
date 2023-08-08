@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using ContactInformation.WebAPI.Dtos.User;
+using ContactInformation.WebAPI.Exceptions;
 using ContactInformation.WebAPI.Models;
 using ContactInformation.WebAPI.Repositories.UserRepository;
+using System.Security.Cryptography;
 
 namespace ContactInformation.WebAPI.Services.UserService
 {
@@ -43,21 +45,41 @@ namespace ContactInformation.WebAPI.Services.UserService
             return user;
         }
 
-        public async Task<UserDto> UpdateUser(string token, UserRegistrationDto userToUpdate)
+        public async Task<UserDto> UpdateUser(int userId, UserRegistrationDto userToUpdate)
         {
-            var user = await _userRepository.GetUserByToken(token);
-            if(user == null)
+            var user = await _userRepository.GetUserById(userId);
+            if (user == null)
             {
-                return null!;
+                throw new UserNotFoundException($"User with ID {userId} not found.");
             }
-            var newUserModel = _mapper.Map<User>(userToUpdate);
 
-            var newUserResponse = await _userRepository.UpdateUser(newUserModel);
-            if(newUserResponse != null)
+            var userModel = _mapper.Map<User>(userToUpdate);
+
+            CreatePasswordHash(userToUpdate.Password, out byte[] passwordHash, out byte[] passwordSalt);
+
+            userModel.Id = userId;
+            userModel.FirstName = userToUpdate.FirstName;
+            userModel.LastName = userToUpdate.LastName;
+            userModel.Username = userToUpdate.Username;
+            userModel.PasswordHash = passwordHash;
+            userModel.PasswordSalt = passwordSalt;
+
+            var newUserResponse = await _userRepository.UpdateUser(userModel);
+            if (newUserResponse == null)
             {
-                return null!;
+                throw new UserUpdateFailedException("User update failed.");
             }
+
             return _mapper.Map<UserDto>(newUserResponse);
+        }
+
+        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            using (var hmac = new HMACSHA512())
+            {
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            }
         }
     }
 }
