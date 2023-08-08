@@ -59,10 +59,10 @@ namespace ContactInformation.WebAPI.Services.ContactService
 
         public async Task<Contact> UpdateContact(int userId, int contactId, ContactUpdationDto contactToUpdate)
         {
-            var existingContact = await _contactRepository.GetContact(userId, contactToUpdate.Id);
+            var existingContact = await _contactRepository.GetContact(userId, contactId);
             if (existingContact == null)
             {
-                throw new ContactNotFoundException($"Contact with ID {contactToUpdate.Id} not found.");
+                throw new ContactNotFoundException($"Contact with ID {contactId} not found.");
             }
 
             var updatedContact = _mapper.Map(contactToUpdate, existingContact);
