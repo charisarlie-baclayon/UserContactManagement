@@ -5,8 +5,8 @@ namespace ContactInformation.WebAPI.Repositories.UserRepository
     public interface IUserRepository
     {
         Task<int> CreateUser (User newUser);
-        Task<User> GetUser (string token);
+        Task<User> GetUserByToken (string token);
         Task<User> UpdateUser (User updateUser);
-        Task<bool> DeleteUser (string token);
+        Task<bool> DeleteUser (int userId);
     }
 }
