@@ -3,7 +3,6 @@ using ContactInformation.WebAPI.Dtos.User;
 using ContactInformation.WebAPI.Exceptions;
 using ContactInformation.WebAPI.Models;
 using ContactInformation.WebAPI.Repositories.UserRepository;
-using System.Runtime.Serialization;
 using System.Security.Claims;
 using System.Security.Cryptography;
 
