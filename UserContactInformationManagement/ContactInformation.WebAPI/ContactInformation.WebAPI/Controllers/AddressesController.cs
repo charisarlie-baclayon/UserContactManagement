@@ -152,7 +152,7 @@ namespace ContactInformation.WebAPI.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("address-types")]
         public async Task<IActionResult> GetAddressTypes()
         {
             try
@@ -162,7 +162,7 @@ namespace ContactInformation.WebAPI.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception and return an error response
+                _logger.LogCritical(ex.Message);
                 return StatusCode(500, "An error occurred while fetching address types.");
             }
         }
