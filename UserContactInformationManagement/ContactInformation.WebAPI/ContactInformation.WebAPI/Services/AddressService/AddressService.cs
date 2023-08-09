@@ -71,6 +71,13 @@ namespace ContactInformation.WebAPI.Services.AddressService
         }
 
         /// <inheritdoc />
+        public async Task<IEnumerable<AddressType>> GetAddressTypes()
+        {
+            var addressTypes = Enum.GetValues(typeof(AddressType));
+            return await Task.FromResult(addressTypes.Cast<AddressType>().ToList());
+        }
+
+        /// <inheritdoc />
         public async Task<Address> UpdateAddress(int contactId, int addressId, AddressCreationDto addressToUpdate)
         {
             var existingAddress = await _addressRepository.GetAddress(contactId, addressId);

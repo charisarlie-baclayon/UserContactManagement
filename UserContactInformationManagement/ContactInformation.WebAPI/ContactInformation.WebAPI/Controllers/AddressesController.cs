@@ -151,5 +151,20 @@ namespace ContactInformation.WebAPI.Controllers
                 return StatusCode(500, "Something went wrong");
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAddressTypes()
+        {
+            try
+            {
+                var addressTypes = await _addressService.GetAddressTypes();
+                return Ok(addressTypes);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception and return an error response
+                return StatusCode(500, "An error occurred while fetching address types.");
+            }
+        }
     }
 }

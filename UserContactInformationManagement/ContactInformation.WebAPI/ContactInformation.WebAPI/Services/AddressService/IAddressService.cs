@@ -47,5 +47,11 @@ namespace ContactInformation.WebAPI.Services.AddressService
         /// <param name="addressToUpdate">The updated address data.</param>
         /// <returns>The updated address model.</returns>
         Task<Address> UpdateAddress(int contactId, int addressId, AddressCreationDto addressToUpdate);
+
+        /// <summary>
+        /// Gets a list of address types.
+        /// </summary>
+        /// <returns>A list of address types.</returns>
+        Task<IEnumerable<AddressType>> GetAddressTypes();
     }
 }
