@@ -11,7 +11,7 @@ using System.Security.Cryptography;
 namespace ContactInformation.WebAPI.Services.AuthenticationService
 {
     /// <summary>
-    /// Provides method implementation from IUserService.
+    /// Provides method implementation from IAuthenticationService.
     /// </summary>
     public class AuthenticationService : IAuthenticationService
     {
