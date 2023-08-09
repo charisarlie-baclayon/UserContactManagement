@@ -12,9 +12,9 @@ namespace ContactInformation.WebAPI.Repositories.ContactRepository
         private readonly ContactInformationDbContext _context;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ContactRepository"/> class.
+        /// Initializes a new instance of the ContactRepository class.
         /// </summary>
-        /// <param name="context">The database context for contact-related operations.</param>
+        /// <param name="context">The database context for accessing contact-related data.</param>
         public ContactRepository(ContactInformationDbContext context)
         {
             _context = context;
