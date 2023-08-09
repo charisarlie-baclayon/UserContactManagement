@@ -71,10 +71,13 @@ namespace ContactInformation.WebAPI.Services.AddressService
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<AddressType>> GetAddressTypes()
+        public async Task<IEnumerable<string>> GetAddressTypes()
         {
-            var addressTypes = Enum.GetValues(typeof(AddressType));
-            return await Task.FromResult(addressTypes.Cast<AddressType>().ToList());
+            var addressTypes = Enum.GetValues(typeof(AddressType))
+                           .Cast<AddressType>()
+                           .Select(addressType => addressType.ToString());
+
+            return await Task.FromResult(addressTypes.ToList());
         }
 
         /// <inheritdoc />

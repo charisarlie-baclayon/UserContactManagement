@@ -52,6 +52,6 @@ namespace ContactInformation.WebAPI.Services.AddressService
         /// Gets a list of address types.
         /// </summary>
         /// <returns>A list of address types.</returns>
-        Task<IEnumerable<AddressType>> GetAddressTypes();
+        Task<IEnumerable<string>> GetAddressTypes();
     }
 }
