@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace ContactInformation.WebAPI.Models
 {
     /// <summary>
-    /// Represents a contact entity in the system.
+    /// Represents a contact entity associated with a user in the system.
     /// </summary>
     [Table("Contacts")]
     public class Contact
