@@ -36,7 +36,7 @@ namespace ContactInformation.WebAPI.Services.AddressService
             {
                 throw new AddressDeletionFailedException("Address deletion failed.");
             }
-            return true;
+            return deleted;
         }
 
         public async Task<AddressDto> GetAddress(int contactId, int addressId)
