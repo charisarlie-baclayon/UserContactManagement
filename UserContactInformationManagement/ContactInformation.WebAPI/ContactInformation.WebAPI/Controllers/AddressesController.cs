@@ -130,6 +130,7 @@ namespace ContactInformation.WebAPI.Controllers
                 {
                     return Ok();
                 }
+                _logger.LogInformation($"Address with id {addressId} cannot be found in this contact.");
                 return NotFound();
             }
             catch (ContactNotFoundException ex)
