@@ -4,15 +4,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ContactInformation.WebAPI.Repositories.ContactRepository
 {
+    /// <summary>
+    /// Implementation of the contact repository interface for performing contact-related data operations.
+    /// </summary>
     public class ContactRepository : IContactRepository
     {
         private readonly ContactInformationDbContext _context;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ContactRepository"/> class.
+        /// </summary>
+        /// <param name="context">The database context for contact-related operations.</param>
         public ContactRepository(ContactInformationDbContext context)
         {
             _context = context;
         }
 
+        /// <inheritdoc />
         public async Task<IEnumerable<Contact>> GetContacts(int userId)
         {
             var contacts = await _context.Contacts
@@ -22,6 +30,7 @@ namespace ContactInformation.WebAPI.Repositories.ContactRepository
             return contacts;
         }
 
+        /// <inheritdoc />
         public async Task<Contact> GetContact(int userId, int contactId)
         {
             var contact = await _context.Contacts
@@ -30,6 +39,7 @@ namespace ContactInformation.WebAPI.Repositories.ContactRepository
             return contact!;
         }
 
+        /// <inheritdoc />
         public async Task<int> CreateContact(int userId, Contact contactToAdd)
         {
             _context.Contacts.Add(contactToAdd);
@@ -42,6 +52,7 @@ namespace ContactInformation.WebAPI.Repositories.ContactRepository
             return 0;
         }
 
+        /// <inheritdoc />
         public async Task<Contact> UpdateContact(int userId, Contact contactToUpdate)
         {
             var contact = await _context.Contacts
@@ -65,6 +76,7 @@ namespace ContactInformation.WebAPI.Repositories.ContactRepository
             return null!;
         }
 
+        /// <inheritdoc />
         public async Task<bool> DeleteContact(int userId, int contactId)
         {
             var contact = await _context.Contacts
