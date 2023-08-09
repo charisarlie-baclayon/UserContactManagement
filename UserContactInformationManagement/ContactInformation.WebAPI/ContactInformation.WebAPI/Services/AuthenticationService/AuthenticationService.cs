@@ -69,7 +69,7 @@ namespace ContactInformation.WebAPI.Services.AuthenticationService
         {
             var userModel = _mapper.Map<User>(userLoginDto);
             var user = await _userService.GetUser(userModel);
-            if (user == null)
+            if (user == null || !userLoginDto.Username.Equals(user.Username, StringComparison.Ordinal))
             {
                 throw new InvalidCredentialsException("Invalid credentials.");
             }
