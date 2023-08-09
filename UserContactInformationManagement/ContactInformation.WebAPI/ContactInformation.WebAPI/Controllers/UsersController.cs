@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ContactInformation.WebAPI.Controllers
 {
+    /// <summary>
+    /// Controller responsible for managing user-related operations.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
@@ -19,6 +22,11 @@ namespace ContactInformation.WebAPI.Controllers
         private readonly IUserService _userService;
         private int _userId;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserController"/> class.
+        /// </summary>
+        /// <param name="logger">The logger instance for logging.</param>
+        /// <param name="userService">The service for user-related operations.</param>
         public UsersController(ILogger<UsersController> logger, IContactService contactService,
             IUserService userService)
         {
@@ -27,12 +35,31 @@ namespace ContactInformation.WebAPI.Controllers
             GetUserIdentity();
         }
 
+        /// <summary>
+        /// Retrieves the user identity asynchronously and assigns it to the _userId field.
+        /// </summary>
         private async void GetUserIdentity()
         {
             _userId = await _userService.GetUserId();
         }
 
+        /// <summary>
+        /// Gets the details of the authenticated user.
+        /// </summary>
+        /// <returns>The details of the authenticated user.</returns>
+        /// <remarks>
+        /// Sample Request:
+        /// 
+        ///     GET /api/user
+        ///
+        /// </remarks>
+        /// <response code="200">Returns the details of the authenticated user.</response>
+        /// <response code="404">User not found.</response>
+        /// <response code="500">Internal server error.</response>
         [HttpGet]
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetUser()
         {
             try
@@ -52,7 +79,29 @@ namespace ContactInformation.WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates the details of the authenticated user.
+        /// </summary>
+        /// <param name="userToUpdate">The updated user details.</param>
+        /// <returns>The updated user details.</returns>
+        /// <remarks>
+        /// Sample Request:
+        /// 
+        ///     PUT /api/user
+        ///     {
+        ///         "firstName": "UpdatedFirstName",
+        ///         "lastName": "UpdatedLastName",
+        ///         "email": "updated@example.com"
+        ///     }
+        ///
+        /// </remarks>
+        /// <response code="200">Returns the updated user details.</response>
+        /// <response code="404">User not found or update failed.</response>
+        /// <response code="500">Internal server error.</response>
         [HttpPut]
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateUser(UserRegistrationDto userToUpdate)
         {
             try
@@ -77,7 +126,23 @@ namespace ContactInformation.WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Deletes the authenticated user.
+        /// </summary>
+        /// <returns>Returns a status indicating the success of the operation.</returns>
+        /// <remarks>
+        /// Sample Request:
+        /// 
+        ///     DELETE /api/user
+        ///
+        /// </remarks>
+        /// <response code="200">User successfully deleted.</response>
+        /// <response code="404">User not found or deletion failed.</response>
+        /// <response code="500">Internal server error.</response>
         [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteUser()
         {
             try
