@@ -38,8 +38,11 @@ namespace ContactInformation.WebAPI.Controllers
         /// 
         ///     POST /api/authentication/register
         ///     {
-        ///         "username": "newUser",
-        ///         "password": "password123"
+        ///         "firstName": "NewFirstName",
+        ///         "lastName": "NewLastName",
+        ///         "username": "newusername",
+        ///         "password": "newpassword",
+        ///         "confirmPassword": "newpassword"
         ///     }
         ///
         /// </remarks>

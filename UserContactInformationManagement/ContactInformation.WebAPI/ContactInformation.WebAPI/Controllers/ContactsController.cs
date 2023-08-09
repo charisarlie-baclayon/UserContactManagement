@@ -118,11 +118,19 @@ namespace ContactInformation.WebAPI.Controllers
         /// <remarks>
         /// Sample Request:
         /// 
-        ///     POST /api/contacts
+        ///    POST /api/contacts
         ///     {
         ///         "firstName": "John",
         ///         "lastName": "Doe",
-        ///         "email": "john.doe@example.com"
+        ///         "addresses": [
+        ///             {
+        ///                 "addressDescription": "123 Main St",
+        ///                 "addressType": "Home"
+        ///             }
+        ///         ],
+        ///         "phoneNumber": "13182419921",
+        ///         "emailAddress": "john.doe@example.com",
+        ///         "birthDate": "1990-01-01T00:00:00.000Z"
         ///     }
         ///
         /// </remarks>
@@ -165,11 +173,13 @@ namespace ContactInformation.WebAPI.Controllers
         /// <remarks>
         /// Sample Request:
         /// 
-        ///     PUT /api/contacts/{contactId}
+        ///     PUT /api/contacts
         ///     {
-        ///         "firstName": "Updated John",
-        ///         "lastName": "Updated Doe",
-        ///         "email": "updated.john.doe@example.com"
+        ///         "firstName": "John",
+        ///         "lastName": "Doe",
+        ///         "phoneNumber": "13182419921",
+        ///         "emailAddress": "john.doe@example.com",
+        ///         "birthDate": "1990-01-01T00:00:00.000Z"
         ///     }
         ///
         /// </remarks>
