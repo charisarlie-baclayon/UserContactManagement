@@ -1,7 +1,6 @@
 ﻿using ContactInformation.WebAPI.Context;
 using ContactInformation.WebAPI.Models;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
 
 namespace ContactInformation.WebAPI.Repositories.UserRepository
 {
