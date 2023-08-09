@@ -10,12 +10,21 @@ using System.Security.Cryptography;
 
 namespace ContactInformation.WebAPI.Services.AuthenticationService
 {
+    /// <summary>
+    /// Provides method implementation from IUserService.
+    /// </summary>
     public class AuthenticationService : IAuthenticationService
     {
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
         private readonly IConfiguration _configuration;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AuthenticationService"/> class.
+        /// </summary>
+        /// <param name="mapper">AutoMapper instance for object mapping.</param>
+        /// <param name="userService">User service for user-related operations.</param>
+        /// <param name="configuration">Configuration settings.</param>
         public AuthenticationService(IMapper mapper, IUserService userService, IConfiguration configuration)
         {
             _mapper = mapper;
@@ -23,6 +32,7 @@ namespace ContactInformation.WebAPI.Services.AuthenticationService
             _configuration = configuration;
         }
 
+        /// <inheritdoc/>
         public async Task<UserDto> Register(UserRegistrationDto userRegistrationDto)
         {
             var userModel = _mapper.Map<User>(userRegistrationDto);
@@ -54,6 +64,7 @@ namespace ContactInformation.WebAPI.Services.AuthenticationService
             return _mapper.Map<UserDto>(newUserModel);
         }
 
+        /// <inheritdoc/>
         public async Task<string> Login(UserLoginDto userLoginDto)
         {
             var userModel = _mapper.Map<User>(userLoginDto);
@@ -71,6 +82,12 @@ namespace ContactInformation.WebAPI.Services.AuthenticationService
             return token;
         }
 
+        /// <summary>
+        /// Creates a hash of the provided password and generates a salt.
+        /// </summary>
+        /// <param name="password">The password to hash.</param>
+        /// <param name="passwordHash">The resulting password hash.</param>
+        /// <param name="passwordSalt">The generated password salt.</param>
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512())
@@ -79,6 +96,14 @@ namespace ContactInformation.WebAPI.Services.AuthenticationService
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }
         }
+
+        /// <summary>
+        /// Verifies whether the provided password matches the stored password hash.
+        /// </summary>
+        /// <param name="password">The password to verify.</param>
+        /// <param name="passwordHash">The stored password hash.</param>
+        /// <param name="passwordSalt">The stored password salt.</param>
+        /// <returns><c>true</c> if the password is verified; otherwise, <c>false</c>.</returns>
         private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512(passwordSalt))
@@ -88,6 +113,11 @@ namespace ContactInformation.WebAPI.Services.AuthenticationService
             }
         }
 
+        /// <summary>
+        /// Creates a JWT token for the provided user.
+        /// </summary>
+        /// <param name="user">The user for whom the token is created.</param>
+        /// <returns>The generated JWT token.</returns>
         private string CreateToken(User user)
         {
             List<Claim> claims = new List<Claim>
