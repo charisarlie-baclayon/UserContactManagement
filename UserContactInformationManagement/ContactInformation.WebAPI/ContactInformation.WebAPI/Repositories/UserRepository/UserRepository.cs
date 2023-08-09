@@ -14,13 +14,6 @@ namespace ContactInformation.WebAPI.Repositories.UserRepository
             _context = context;
         }
 
-        public async Task<User> GetUserByToken(string token)
-        {   
-            var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Username.Equals(token));
-            return user!;
-        }
-
         public async Task<int> CreateUser(User newUser)
         {
             _context.Users.Add(newUser);
