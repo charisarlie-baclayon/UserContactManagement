@@ -124,6 +124,6 @@ void ConfigureServices(IServiceCollection services)
     services.AddScoped<IUserService, UserService>();
     services.AddScoped<IAuthenticationService, AuthenticationService>();
     services.AddScoped<IContactService, ContactService>();
-    services.AddScoped<IAddressRepository, AddressRepository>();
+    services.AddScoped<IAddressService, AddressService>();
 
 }

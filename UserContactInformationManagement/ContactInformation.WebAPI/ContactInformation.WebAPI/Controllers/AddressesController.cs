@@ -71,7 +71,8 @@ namespace ContactInformation.WebAPI.Controllers
             try
             {
                 var addressId = await _addressService.CreateAddress(contactId, addressToCreate);
-                return CreatedAtRoute("GetAddress", new { contactId = contactId, addressId = addressId }, null);
+                //return CreatedAtRoute("GetAddress", new { contactId = contactId, addressId = addressId }, null);
+                return Ok(await _addressService.GetAddress(contactId, addressId));
             }
             catch (ContactNotFoundException ex)
             {
@@ -96,7 +97,8 @@ namespace ContactInformation.WebAPI.Controllers
             try
             {
                 var updatedAddress = await _addressService.UpdateAddress(contactId, addressId, addressToUpdate);
-                return AcceptedAtRoute("GetAddress", new { contactId = contactId, addressId = updatedAddress.Id }, updatedAddress);
+                //return AcceptedAtRoute("GetAddress", new { contactId = contactId, addressId = updatedAddress.Id }, updatedAddress);
+                return Ok(await _addressService.GetAddress(contactId, addressId));
             }
             catch (ContactNotFoundException ex)
             {

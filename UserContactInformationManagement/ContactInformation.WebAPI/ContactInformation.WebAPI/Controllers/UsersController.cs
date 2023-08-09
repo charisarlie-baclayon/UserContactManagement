@@ -83,7 +83,7 @@ namespace ContactInformation.WebAPI.Controllers
             try
             {
                 var deleted = await _userService.DeleteUser(_userId);
-                return NotFound();
+                return Ok();
             }
             catch (UserDeletionFailedException ex)
             {
