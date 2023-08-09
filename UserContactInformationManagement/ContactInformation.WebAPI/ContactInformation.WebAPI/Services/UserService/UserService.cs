@@ -9,18 +9,29 @@ using System.Security.Cryptography;
 
 namespace ContactInformation.WebAPI.Services.UserService
 {
+    /// <summary>
+    /// Provides method implementation from IUserService.
+    /// </summary>
     public class UserService : IUserService
     {
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
+        /// <summary>
+        /// Initializes a new instance of the UserService class.
+        /// </summary>
+        /// <param name="mapper">An instance of AutoMapper.</param>
+        /// <param name="userRepository">An instance of the user repository.</param>
+        /// <param name="httpContextAccessor">An instance of IHttpContextAccessor for accessing the HttpContext.</param>
         public UserService(IMapper mapper, IUserRepository userRepository, IHttpContextAccessor httpContextAccessor)
         {
             _mapper = mapper;
             _userRepository = userRepository;
             _httpContextAccessor = httpContextAccessor;
         }
+
+        /// <inheritdoc/>
         public async Task<int> CreateUser(User newUser)
         {
             var user = await _userRepository.GetUser(newUser);
@@ -31,6 +42,7 @@ namespace ContactInformation.WebAPI.Services.UserService
             return await _userRepository.CreateUser(newUser);
         }
 
+        /// <inheritdoc/>
         public async Task<bool> DeleteUser(int userId)
         {
             var res = await _userRepository.DeleteUser(userId);
@@ -41,6 +53,7 @@ namespace ContactInformation.WebAPI.Services.UserService
             return res;
         }
 
+        /// <inheritdoc/>
         public async Task<UserDto> GetUserById(int userId)
         {
             var user = await _userRepository.GetUserById(userId);
@@ -51,12 +64,14 @@ namespace ContactInformation.WebAPI.Services.UserService
             return _mapper.Map<UserDto>(user);
         }
 
+        /// <inheritdoc/>
         public async Task<User> GetUser(User userToGet)
         {
             var user = await _userRepository.GetUser(userToGet);
             return user;
         }
 
+        /// <inheritdoc/>
         public async Task<UserDto> UpdateUser(int userId, UserRegistrationDto userToUpdate)
         {
             var user = await _userRepository.GetUserById(userId);
@@ -85,6 +100,7 @@ namespace ContactInformation.WebAPI.Services.UserService
             return _mapper.Map<UserDto>(newUserResponse);
         }
 
+        /// <inheritdoc/>
         public async Task<int> GetUserId()
         {
             var result =  _httpContextAccessor.HttpContext!.User.Identity as ClaimsIdentity;
@@ -101,6 +117,12 @@ namespace ContactInformation.WebAPI.Services.UserService
             return user.Id;
         }
 
+        /// <summary>
+        /// Creates a password hash and salt using HMACSHA512 algorithm.
+        /// </summary>
+        /// <param name="password">The password to be hashed.</param>
+        /// <param name="passwordHash">The resulting password hash.</param>
+        /// <param name="passwordSalt">The resulting password salt.</param>
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512())
