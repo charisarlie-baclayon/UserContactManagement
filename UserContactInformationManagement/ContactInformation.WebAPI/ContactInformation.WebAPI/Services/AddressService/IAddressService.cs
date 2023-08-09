@@ -21,7 +21,7 @@ namespace ContactInformation.WebAPI.Services.AddressService
         /// </summary>
         /// <param name="contactId">The ID of the contact that the address belongs to.</param>
         /// <param name="addressId">The ID of the address to be deleted.</param>
-        /// <returns><c>true</c> if the address was successfully deleted; otherwise, <c>false</c>.</returns>
+        /// <returns>True if the address was successfully deleted; otherwise, false.</returns>
         Task<bool> DeleteAddress(int contactId, int addressId);
 
         /// <summary>
