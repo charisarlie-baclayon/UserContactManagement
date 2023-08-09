@@ -6,16 +6,27 @@ using ContactInformation.WebAPI.Repositories.ContactRepository;
 
 namespace ContactInformation.WebAPI.Services.ContactService
 {
+    /// <summary>
+    /// Provides method implementation from IContactService.
+    /// </summary>
     public class ContactService : IContactService
     {
         private readonly IMapper _mapper;
         private readonly IContactRepository _contactRepository;
 
+        /// <summary>
+        /// Initializes a new instance of the ContactService class.
+        /// </summary>
+        /// <param name="mapper">AutoMapper instance for mapping between DTOs and models.</param>
+        /// <param name="contactRepository">Repository for data access operations on contacts.</param>
         public ContactService(IMapper mapper, IContactRepository contactRepository)
         {
             _mapper = mapper;
             _contactRepository = contactRepository;
         }
+
+
+        /// <inheritdoc/>
         public async Task<int> CreateContact(int userId, ContactCreationDto contactToAdd)
         {
             var newContact = _mapper.Map<Contact>(contactToAdd);
@@ -29,6 +40,7 @@ namespace ContactInformation.WebAPI.Services.ContactService
             return contactId;
         }
 
+        /// <inheritdoc/>
         public async Task<bool> DeleteContact(int userId, int contactId)
         {
             var deleted = await _contactRepository.DeleteContact(userId, contactId);
@@ -39,6 +51,7 @@ namespace ContactInformation.WebAPI.Services.ContactService
             return true;
         }
 
+        /// <inheritdoc/>
         public async Task<ContactDto> GetContact(int userId, int contactId)
         {
             var contact = await _contactRepository.GetContact(userId, contactId);
@@ -50,6 +63,7 @@ namespace ContactInformation.WebAPI.Services.ContactService
             return newContactDto;
         }
 
+        /// <inheritdoc/>
         public async Task<IEnumerable<ContactDto>> GetContacts(int userId)
         {
             var contacts = await _contactRepository.GetContacts(userId);
@@ -57,6 +71,7 @@ namespace ContactInformation.WebAPI.Services.ContactService
             return contactDtos;
         }
 
+        /// <inheritdoc/>
         public async Task<Contact> UpdateContact(int userId, int contactId, ContactUpdationDto contactToUpdate)
         {
             var existingContact = await _contactRepository.GetContact(userId, contactId);
