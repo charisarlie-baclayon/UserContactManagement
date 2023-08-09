@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace ContactInformation.WebAPI.Repositories.ContactRepository
 {
     /// <summary>
-    /// Implementation of the contact repository interface for performing contact-related data operations.
+    /// Implementation for performing contact-related data operations.
     /// </summary>
     public class ContactRepository : IContactRepository
     {
