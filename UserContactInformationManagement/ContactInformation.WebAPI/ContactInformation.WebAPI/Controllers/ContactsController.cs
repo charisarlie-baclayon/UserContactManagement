@@ -27,7 +27,7 @@ namespace ContactInformation.WebAPI.Controllers
         /// <param name="logger">The logger instance for logging.</param>
         /// <param name="contactService">The service for managing contacts.</param>
         /// <param name="userService">The service for user-related operations.</param>
-        public ContactsController(ILogger<ContactsController> logger, IContactService contactService, 
+        public ContactsController(ILogger<ContactsController> logger, IContactService contactService,
             IUserService userService)
         {
             _logger = logger;
@@ -52,7 +52,6 @@ namespace ContactInformation.WebAPI.Controllers
         [ProducesResponseType(typeof(List<ContactDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [HttpGet]
         public async Task<IActionResult> GetContacts()
         {
             try
@@ -91,7 +90,6 @@ namespace ContactInformation.WebAPI.Controllers
         [ProducesResponseType(typeof(ContactDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [HttpGet("{contactId}", Name = "GetContact")]
         public async Task<IActionResult> GetContact(int contactId)
         {
             try
@@ -135,7 +133,6 @@ namespace ContactInformation.WebAPI.Controllers
         [Produces("application/json")]
         [ProducesResponseType(typeof(ContactDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [HttpPost]
         public async Task<IActionResult> CreateContact([FromBody] ContactCreationDto contactToCreate)
         {
             try
@@ -231,7 +228,6 @@ namespace ContactInformation.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [HttpDelete("{contactId}")]
         public async Task<IActionResult> DeleteContact(int contactId)
         {
             try
