@@ -1,6 +1,5 @@
 ﻿using ContactInformation.WebAPI.Dtos.Address;
 using ContactInformation.WebAPI.Exceptions;
-using ContactInformation.WebAPI.Models;
 using ContactInformation.WebAPI.Services.AddressService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
