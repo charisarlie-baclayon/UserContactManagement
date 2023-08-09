@@ -23,12 +23,12 @@ namespace ContactInformation.WebAPI.Dtos.Contact
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Last name must be between 2 and 50 characters.")]
         public string LastName { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Gets or sets the addresses of the contact.
-        /// </summary>
-        [Required(ErrorMessage = "At least one address is required.")]
-        [AtLeastOneAddressRequired(ErrorMessage = "At least one address is required.")]
-        public List<AddressCreationDto>? Addresses { get; set; }
+        ///// <summary>
+        ///// Gets or sets the addresses of the contact.
+        ///// </summary>
+        //[Required(ErrorMessage = "At least one address is required.")]
+        //[AtLeastOneAddressRequired(ErrorMessage = "At least one address is required.")]
+        //public List<AddressCreationDto>? Addresses { get; set; }
 
         /// <summary>
         /// Gets or sets the phone number of the contact.

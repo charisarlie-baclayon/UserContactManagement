@@ -81,6 +81,7 @@ namespace ContactInformation.WebAPI.Services.ContactService
             }
 
             var updatedContact = _mapper.Map(contactToUpdate, existingContact);
+            updatedContact.Id = contactId;
 
             var result = await _contactRepository.UpdateContact(userId, updatedContact);
             if (result == null)
