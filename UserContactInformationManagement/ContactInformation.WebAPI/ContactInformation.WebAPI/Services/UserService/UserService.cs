@@ -3,6 +3,7 @@ using ContactInformation.WebAPI.Dtos.User;
 using ContactInformation.WebAPI.Exceptions;
 using ContactInformation.WebAPI.Models;
 using ContactInformation.WebAPI.Repositories.UserRepository;
+using System.Runtime.Serialization;
 using System.Security.Claims;
 using System.Security.Cryptography;
 
@@ -33,12 +34,25 @@ namespace ContactInformation.WebAPI.Services.UserService
         public async Task<bool> DeleteUser(int userId)
         {
             var res = await _userRepository.DeleteUser(userId);
+            if (!res)
+            {
+                throw new UserDeletionFailedException("Address deletion failed.");
+            }
             return res;
         }
 
         public async Task<UserDto> GetUserByToken(string token)
         {
             var user = await _userRepository.GetUserByToken(token);
+            return _mapper.Map<UserDto>(user);
+        }
+        public async Task<UserDto> GetUserById(int userId)
+        {
+            var user = await _userRepository.GetUserById(userId);
+            if (user == null)
+            {
+                throw new UserNotFoundException($"User with ID {userId} not found.");
+            }
             return _mapper.Map<UserDto>(user);
         }
 
@@ -78,7 +92,7 @@ namespace ContactInformation.WebAPI.Services.UserService
 
         public async Task<int> GetUserId()
         {
-            var result = _httpContextAccessor.HttpContext!.User.Identity as ClaimsIdentity;
+            var result =  _httpContextAccessor.HttpContext!.User.Identity as ClaimsIdentity;
             if(result == null)
             {
                 return 0;

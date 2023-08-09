@@ -11,5 +11,6 @@ namespace ContactInformation.WebAPI.Services.UserService
         Task<UserDto> UpdateUser(int userId, UserRegistrationDto userToUpdate);
         Task<bool> DeleteUser(int userId);
         Task<int> GetUserId();
+        Task<UserDto> GetUserById(int userId);
     }
 }
