@@ -102,18 +102,23 @@ namespace ContactInformation.WebAPI.Services.UserService
         /// <inheritdoc/>
         public async Task<int> GetUserId()
         {
-            var result =  _httpContextAccessor.HttpContext!.User.Identity as ClaimsIdentity;
+            var result =  _httpContextAccessor.HttpContext?.User?.Identity as ClaimsIdentity;
             if(result == null)
             {
                 return 0;
             }
             var userClaims = result.Claims;
-            var user = new User
+
+            var nameClaim = userClaims.FirstOrDefault(u => u.Type == ClaimTypes.Name)?.Value;
+            var idClaim = Convert.ToInt32(userClaims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier)?.Value);
+
+            if (nameClaim == null || idClaim == 0 )
             {
-                Username = userClaims.FirstOrDefault(u => u.Type == ClaimTypes.Name)?.Value,
-                Id = Convert.ToInt32(userClaims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier)?.Value)
-            };
-            return user.Id;
+                return 0;
+            }
+
+            await Task.Delay(0);
+            return idClaim;
         }
 
         /// <summary>
