@@ -23,11 +23,11 @@ namespace ContactInformation.WebAPI.Controllers
         private int _userId;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UserController"/> class.
+        /// Initializes a new instance of the UserController class.
         /// </summary>
         /// <param name="logger">The logger instance for logging.</param>
         /// <param name="userService">The service for user-related operations.</param>
-        public UsersController(ILogger<UsersController> logger, IContactService contactService,
+        public UsersController(ILogger<UsersController> logger,
             IUserService userService)
         {
             _logger = logger;
