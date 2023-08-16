@@ -1,5 +1,6 @@
 import React from "react";
 import MainButton from "../../components/MainButton";
+import loginPhoto from "../../assets/loginphoto.jpg";
 
 const LoginView = () => {
   return (
@@ -16,13 +17,13 @@ const LoginView = () => {
               </p>
               <form action="" class="flex flex-col gap-4">
                 <input
-                  class="p-2 mt-8 rounded border"
+                  class="p-2 mt-8 rounded border bg-wh"
                   type="text"
                   name="username"
                   placeholder="username"
                 ></input>
                 <input
-                  class="p-2 rounded border w-full"
+                  class="p-2 rounded border w-full bg-wh"
                   type="password"
                   name="password"
                   placeholder="password"
@@ -44,7 +45,7 @@ const LoginView = () => {
             </div>
           </div>
           <div class="sm:block hidden w-1/2 relative">
-            <img class="rounded-e-xl" src="loginphoto.jpg" alt="" />
+            <img class="rounded-e-xl" src={loginPhoto} alt="" />
             <div class="absolute inset-0 bg-gradient-to-br from-accentPurple to-darkerPurple opacity-30 rounded-xl"></div>
           </div>
         </div>
