@@ -1,12 +1,14 @@
-function App() {
+import { Routes, Route } from "react-router-dom";
+import Login from "./pages/userauth/Login";
 
+const App = () => {
   return (
     <>
-      <div className="w-screen h-screen bg-red-300">
-        <h1 className="text-3xl font-bold underline">Hello World!</h1>
-      </div>
+      <Routes>
+        <Route path="/login" element={<Login></Login>}></Route>
+      </Routes>
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;
