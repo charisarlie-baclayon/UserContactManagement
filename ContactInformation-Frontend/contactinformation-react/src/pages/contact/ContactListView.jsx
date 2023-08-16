@@ -1,58 +1,156 @@
 import React from "react";
 
 const ContactListView = () => {
-  const people = [
+  const contacts = [
     {
-      name: "Leslie Alexander",
-      email: "leslie.alexander@example.com",
-      role: "Co-Founder / CEO",
-      imageUrl:
-        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-      lastSeen: "3h ago",
-      lastSeenDateTime: "2023-01-23T13:23Z",
+      firstName: "John",
+      lastName: "Doe",
+      addresses: [
+        {
+          addressDescription: "123 Main St, Example City, CA 12345",
+          addressType: "Home",
+        },
+      ],
+      phoneNumber: "555-123-4567",
+      emailAddress: "john.doe@example.com",
+      birthDate: new Date(1990, 5, 15),
+      favorite: true,
+      imageUrl: "https://example.com/john_doe.jpg",
     },
     {
-      name: "Michael Foster",
-      email: "michael.foster@example.com",
-      role: "Co-Founder / CTO",
-      imageUrl:
-        "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-      lastSeen: "3h ago",
-      lastSeenDateTime: "2023-01-23T13:23Z",
+      firstName: "Jane",
+      lastName: "Smith",
+      addresses: [
+        {
+          addressDescription: "456 Elm St, Sample Town, NY 67890",
+          addressType: "Work",
+        },
+      ],
+      phoneNumber: "555-987-6543",
+      emailAddress: "jane.smith@example.com",
+      birthDate: new Date(1988, 8, 22),
+      favorite: false,
+      imageUrl: "https://example.com/jane_smith.jpg",
     },
     {
-      name: "Dries Vincent",
-      email: "dries.vincent@example.com",
-      role: "Business Relations",
-      imageUrl:
-        "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-      lastSeen: null,
+      firstName: "Michael",
+      lastName: "Johnson",
+      addresses: [
+        {
+          addressDescription: "789 Oak Ave, Testville, TX 54321",
+          addressType: "Home",
+        },
+      ],
+      phoneNumber: "555-555-5555",
+      emailAddress: "michael.johnson@example.com",
+      birthDate: new Date(1995, 2, 10),
+      favorite: true,
+      imageUrl: "https://example.com/michael_johnson.jpg",
     },
     {
-      name: "Lindsay Walton",
-      email: "lindsay.walton@example.com",
-      role: "Front-end Developer",
-      imageUrl:
-        "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-      lastSeen: "3h ago",
-      lastSeenDateTime: "2023-01-23T13:23Z",
+      firstName: "Emily",
+      lastName: "Williams",
+      addresses: [
+        {
+          addressDescription: "101 Maple Rd, Another City, IL 98765",
+          addressType: "Work",
+        },
+      ],
+      phoneNumber: "555-123-7890",
+      emailAddress: "emily.williams@example.com",
+      birthDate: new Date(1992, 10, 8),
+      favorite: true,
+      imageUrl: "https://example.com/emily_williams.jpg",
     },
     {
-      name: "Courtney Henry",
-      email: "courtney.henry@example.com",
-      role: "Designer",
-      imageUrl:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-      lastSeen: "3h ago",
-      lastSeenDateTime: "2023-01-23T13:23Z",
+      firstName: "David",
+      lastName: "Brown",
+      addresses: [
+        {
+          addressDescription: "222 Pine St, Different Town, CA 54321",
+          addressType: "Home",
+        },
+      ],
+      phoneNumber: "555-789-1234",
+      emailAddress: "david.brown@example.com",
+      birthDate: new Date(1985, 7, 17),
+      favorite: false,
+      imageUrl: "https://example.com/david_brown.jpg",
     },
     {
-      name: "Tom Cook",
-      email: "tom.cook@example.com",
-      role: "Director of Product",
-      imageUrl:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-      lastSeen: null,
+      firstName: "Olivia",
+      lastName: "Davis",
+      addresses: [
+        {
+          addressDescription: "333 Cedar Rd, Sample City, TX 67890",
+          addressType: "Work",
+        },
+      ],
+      phoneNumber: "555-567-8901",
+      emailAddress: "olivia.davis@example.com",
+      birthDate: new Date(1993, 3, 25),
+      favorite: true,
+      imageUrl: "https://example.com/olivia_davis.jpg",
+    },
+    {
+      firstName: "William",
+      lastName: "Miller",
+      addresses: [
+        {
+          addressDescription: "444 Oak Ave, Different City, NY 12345",
+          addressType: "Home",
+        },
+      ],
+      phoneNumber: "555-456-7890",
+      emailAddress: "william.miller@example.com",
+      birthDate: new Date(1991, 11, 5),
+      favorite: false,
+      imageUrl: "https://example.com/william_miller.jpg",
+    },
+    {
+      firstName: "Sophia",
+      lastName: "Wilson",
+      addresses: [
+        {
+          addressDescription: "555 Maple Rd, Another Town, CA 67890",
+          addressType: "Work",
+        },
+      ],
+      phoneNumber: "555-234-5678",
+      emailAddress: "sophia.wilson@example.com",
+      birthDate: new Date(1987, 1, 30),
+      favorite: true,
+      imageUrl: "https://example.com/sophia_wilson.jpg",
+    },
+    {
+      firstName: "James",
+      lastName: "Moore",
+      addresses: [
+        {
+          addressDescription: "666 Pine St, Sample City, TX 12345",
+          addressType: "Home",
+        },
+      ],
+      phoneNumber: "555-678-9012",
+      emailAddress: "james.moore@example.com",
+      birthDate: new Date(1984, 9, 12),
+      favorite: false,
+      imageUrl: "https://example.com/james_moore.jpg",
+    },
+    {
+      firstName: "Isabella",
+      lastName: "Taylor",
+      addresses: [
+        {
+          addressDescription: "777 Cedar Rd, Different City, NY 67890",
+          addressType: "Work",
+        },
+      ],
+      phoneNumber: "555-789-0123",
+      emailAddress: "isabella.taylor@example.com",
+      birthDate: new Date(1989, 6, 3),
+      favorite: true,
+      imageUrl: "https://example.com/isabella_taylor.jpg",
     },
   ];
   return (
@@ -60,40 +158,25 @@ const ContactListView = () => {
       <h1 class="text-whiterText">Your Contacts</h1>
 
       <ul role="list" class="divide-y divide-greyBorder">
-        {people.map((person) => (
-          <li key={person.email} class="flex justify-between gap-x-6 py-5">
+        {contacts.map((contact) => (
+          <li
+            key={contact.emailAddress}
+            class="flex justify-between gap-x-6 py-5"
+          >
             <div class="flex min-w-0 gap-x-4">
               <img
                 class="h-12 w-12 flex-none rounded-full bg-gray-50"
-                src={person.imageUrl}
+                src="../src/assets/people.png"
                 alt=""
               />
               <div class="min-w-0 flex-auto">
                 <p class="text-sm font-semibold leading-6 text-whiterText">
-                  {person.name}
+                  {contact.firstName} {contact.lastName}
                 </p>
                 <p class="mt-1 truncate text-xs leading-5 text-gray-500">
-                  {person.email}
+                  {contact.emailAddress}
                 </p>
               </div>
-            </div>
-            <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-              <p class="text-sm leading-6 text-gray-900">{person.role}</p>
-              {person.lastSeen ? (
-                <p class="mt-1 text-xs leading-5 text-gray-500">
-                  Last seen{" "}
-                  <time dateTime={person.lastSeenDateTime}>
-                    {person.lastSeen}
-                  </time>
-                </p>
-              ) : (
-                <div class="mt-1 flex items-center gap-x-1.5">
-                  <div class="flex-none rounded-full bg-emerald-500/20 p-1">
-                    <div class="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                  </div>
-                  <p class="text-xs leading-5 text-gray-500">Online</p>
-                </div>
-              )}
             </div>
           </li>
         ))}

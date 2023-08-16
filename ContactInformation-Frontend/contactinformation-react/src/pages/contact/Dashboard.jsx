@@ -7,7 +7,7 @@ const Dashboard = () => {
     <>
       <div class="flex bg-mainBlack">
         <Sidebar></Sidebar>
-        <div class="p-8 text-2xl font-semibold flex-1 h-screen">
+        <div class="p-8 text-2xl font-semibold flex-1">
           <ContactList></ContactList>
         </div>
       </div>
