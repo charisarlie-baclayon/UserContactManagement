@@ -1,4 +1,5 @@
 import React from "react";
+import MainButton from "../../components/MainButton"
 
 const RegisterView = () => {
   return (
@@ -48,9 +49,7 @@ const RegisterView = () => {
                 placeholder="Confirm Password"
                 required
               />
-              <button className="bg-accentPurple rounded text-darkBlack py-2 font-bold transition duration-300 ease-in-out hover:underline hover:scale-105">
-                Register
-              </button>
+              <MainButton text="Register"></MainButton>
             </form>
           </div>
         </div>

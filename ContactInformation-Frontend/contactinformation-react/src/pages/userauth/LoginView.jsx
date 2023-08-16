@@ -1,4 +1,5 @@
 import React from "react";
+import MainButton from "../../components/MainButton";
 
 const LoginView = () => {
   return (
@@ -26,9 +27,7 @@ const LoginView = () => {
                   name="password"
                   placeholder="password"
                 ></input>
-                <button class="bg-accentPurple rounded text-darkBlack py-2 font-bold transition duration-300 ease-in-out hover:underline hover:scale-105">
-                  Login
-                </button>
+                <MainButton text="Login"></MainButton>
               </form>
               <div class="mt-10 grid grid-cols-3 items-center text-whiteText">
                 <hr class="border-whiteText"></hr>
