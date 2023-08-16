@@ -1,6 +1,6 @@
 import React from "react";
 
-const Login = () => {
+const LoginView = () => {
   return (
     <>
       <section class="bg-mainBlack min-h-screen flex items-center justify-center">
@@ -67,4 +67,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginView;
