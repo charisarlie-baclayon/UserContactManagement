@@ -1,10 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import MainButton from "../../components/MainButton";
 import loginPhoto from "../../assets/loginphoto.jpg";
 import { useNavigate } from "react-router-dom";
+import { loginUser } from "../../api/auth/apiAuth";
 
 const LoginView = () => {
   const navigate = useNavigate();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const response = await loginUser(username, password);
+    console.log(response.data);
+    sessionStorage.setItem("key", response.data);
+    navigate("/");
+  };
+
   return (
     <>
       <section className="bg-mainBlack min-h-screen flex items-center justify-center">
@@ -17,7 +29,11 @@ const LoginView = () => {
               <p className="text-whiteText text-sm mt-4 text-center">
                 If you already a member, easily login.
               </p>
-              <form action="" className="flex flex-col gap-4">
+              <form
+                onSubmit={handleLogin}
+                action=""
+                className="flex flex-col gap-4"
+              >
                 <div className="mt-8">
                   <label htmlFor="username" className="text-whiterText mt-8">
                     Username
@@ -27,6 +43,8 @@ const LoginView = () => {
                     type="text"
                     name="username"
                     placeholder="username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                   ></input>
                 </div>
 
@@ -39,6 +57,8 @@ const LoginView = () => {
                     type="password"
                     name="password"
                     placeholder="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   ></input>
                 </div>
 
