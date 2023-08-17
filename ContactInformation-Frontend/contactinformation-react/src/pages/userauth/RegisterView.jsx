@@ -1,9 +1,50 @@
-import React from "react";
-import MainButton from "../../components/MainButton";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { registerUser, loginUser } from "../../api/auth/apiAuth";
 
 const RegisterView = () => {
   const navigate = useNavigate();
+  const [registrationData, setRegistrationData] = useState({
+    firstName: "",
+    lastName: "",
+    username: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setRegistrationData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await registerUser(registrationData);
+      console.log(response.data);
+      handleLogin();
+    } catch (error) {
+      console.error("Error registering:", error);
+    }
+  };
+
+  const handleLogin = async (e) => {
+    if (e) {
+      e.preventDefault();
+    }
+
+    const response = await loginUser(
+      registrationData.username,
+      registrationData.password
+    );
+
+    console.log(response.data);
+    sessionStorage.setItem("key", response.data);
+    navigate("/");
+  };
+
   return (
     <section className="bg-mainBlack min-h-screen flex items-center justify-center">
       <div className="bg-darkBlack flex rounded-xl shadow-lg max-w-3xl">
@@ -15,7 +56,11 @@ const RegisterView = () => {
             <p className="text-whiteText text-sm mt-4 text-center">
               If you don't have an account yet, register now.
             </p>
-            <form action="" className="flex flex-col gap-4 pb-5 mt-4 ">
+            <form
+              action=""
+              onSubmit={handleRegister}
+              className="flex flex-col gap-4 pb-5 mt-4 "
+            >
               <div className="flex gap-4">
                 <div className="w-1/2">
                   <label htmlFor="firstName" className="text-whiterText">
@@ -27,6 +72,8 @@ const RegisterView = () => {
                     id="firstName"
                     name="firstName"
                     placeholder="First Name"
+                    value={registrationData.firstName}
+                    onChange={handleChange}
                     required
                   />
                 </div>
@@ -40,6 +87,8 @@ const RegisterView = () => {
                     id="lastName"
                     name="lastName"
                     placeholder="Last Name"
+                    value={registrationData.lastName}
+                    onChange={handleChange}
                     required
                   />
                 </div>
@@ -54,6 +103,8 @@ const RegisterView = () => {
                   id="username"
                   name="username"
                   placeholder="Username"
+                  value={registrationData.username}
+                  onChange={handleChange}
                   required
                 />
               </div>
@@ -68,6 +119,8 @@ const RegisterView = () => {
                     id="password"
                     name="password"
                     placeholder="Password"
+                    value={registrationData.password}
+                    onChange={handleChange}
                     required
                   />
                 </div>
@@ -81,6 +134,8 @@ const RegisterView = () => {
                     id="confirmPassword"
                     name="confirmPassword"
                     placeholder="Confirm Password"
+                    value={registrationData.confirmPassword}
+                    onChange={handleChange}
                     required
                   />
                 </div>
