@@ -68,7 +68,7 @@ const ContactList = (props) => {
           {filteredContacts.map((contact) => (
             <li
               key={contact.emailAddress}
-              className="flex justify-between gap-x-6 py-5 cursor-pointer"
+              className="flex justify-between gap-x-6 py-5 cursor-pointer hover:bg-accentPurple"
               onClick={() => openPopup(contact)}
             >
               <div className="flex min-w-0 gap-x-4">
