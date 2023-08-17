@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ContactHeader from "../../components/ContactHeader";
 
 const ContactListView = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -154,16 +155,7 @@ const ContactListView = () => {
 
   return (
     <>
-      <div class="sticky top-0 w-full p-4 bg-mainBlack flex justify-between items-center">
-        <h1 class="text-2xl text-whiterText">Your Contacts</h1>
-        <input
-          type="text"
-          class="text-sm w-96 p-2.5 pl-4 rounded-full bg-gray-800 text-whiteText placeholder-gray-500 focus:outline-none"
-          placeholder="Search contacts..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>
+      <ContactHeader searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
       <ul role="list" class="divide-y divide-greyBorder">
         {filteredContacts.map((contact) => (
@@ -192,35 +184,5 @@ const ContactListView = () => {
     </>
   );
 };
-//     <div>
-//       <h1 class="text-whiterText">Your Contacts</h1>
-
-//       <ul role="list" class="divide-y divide-greyBorder">
-//         {contacts.map((contact) => (
-//           <li
-//             key={contact.emailAddress}
-//             class="flex justify-between gap-x-6 py-5"
-//           >
-//             <div class="flex min-w-0 gap-x-4">
-//               <img
-//                 class="h-12 w-12 flex-none rounded-full"
-//                 src="../src/assets/people.png"
-//                 alt=""
-//               />
-//               <div class="min-w-0 flex-auto">
-//                 <p class="text-sm font-semibold leading-6 text-whiterText">
-//                   {contact.firstName} {contact.lastName}
-//                 </p>
-//                 <p class="mt-1 truncate text-xs leading-5 text-whiteText">
-//                   {contact.emailAddress}
-//                 </p>
-//               </div>
-//             </div>
-//           </li>
-//         ))}
-//       </ul>
-//     </div>
-//   );
-// };
 
 export default ContactListView;
