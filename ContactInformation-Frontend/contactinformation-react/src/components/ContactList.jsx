@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ContactHeader from "./ContactHeader";
 import { getContacts } from "../api/contact/apiContact";
+import ContactAddButton from "./ContactAddButton";
 
 const ContactList = (props) => {
   const token = sessionStorage.getItem("key");
@@ -64,6 +65,11 @@ const ContactList = (props) => {
           ))}
         </ul>
       )}
+      <ContactAddButton
+        onClick={() => {
+          /* Handle add button click */
+        }}
+      />
     </>
   );
 };
