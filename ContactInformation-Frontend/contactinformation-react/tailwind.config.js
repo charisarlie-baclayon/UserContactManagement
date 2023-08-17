@@ -9,7 +9,7 @@ export default {
         whiterText: "#fefcfc",
         whiteText: "#9ca3af",
         greyBorder: "#4b5563",
-        accentPurple: "#e859e9",
+        accentPurple: "#390e53",
         darkerPurple: "#390e53",
         midPurple: "#642E8F",
       },

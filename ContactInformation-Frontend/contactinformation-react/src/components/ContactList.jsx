@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ContactHeader from "./ContactHeader";
 import { getContacts, updateContact } from "../api/contact/apiContact";
 import ContactAddButton from "./ContactAddButton";
-import ContactPopup from "./ContactPopup";
+import ContactPopup from "../components/ContactPopup"; 
 
 const ContactList = (props) => {
   const token = sessionStorage.getItem("key");
@@ -81,16 +81,10 @@ const ContactList = (props) => {
       )}
 
       {isPopupOpen && selectedContact && (
-        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
-          <div className="bg-white p-4 rounded-lg">
-            <p>
-              {selectedContact.firstName} {selectedContact.lastName}
-            </p>
-            <p>{selectedContact.emailAddress}</p>
-            {/* Add more contact details here */}
-            <button onClick={closePopup}>Close</button>
-          </div>
-        </div>
+        <ContactPopup
+          selectedContact={selectedContact}
+          closePopup={closePopup}
+        />
       )}
 
       <ContactAddButton
