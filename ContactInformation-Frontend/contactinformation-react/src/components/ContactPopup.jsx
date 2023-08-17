@@ -1,6 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
+import ContactPopupEditForm from "./ContactPopupEditForm";
 
 const ContactPopup = (props) => {
+  const [isEditFormOpen, setIsEditFormOpen] = useState(false);
+
+  const handleEditClick = () => {
+    setIsEditFormOpen(true);
+  };
+
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
       <div className="relative bg-gray-800 p-5 rounded-lg text-white w-full max-w-md mx-auto md:w-96">
@@ -24,9 +31,7 @@ const ContactPopup = (props) => {
           </svg>{" "}
         </button>
         <button
-          onClick={() => {
-            // Handle edit action
-          }}
+          onClick={handleEditClick}
           className="absolute top-3 right-3 text-whiteText hover:text-darkerPurple"
         >
           Edit
@@ -80,6 +85,12 @@ const ContactPopup = (props) => {
           </div>
         </div>
       </div>
+      {isEditFormOpen && (
+        <ContactPopupEditForm
+          selectedContact={props.selectedContact}
+          closePopup={() => setIsEditFormOpen(false)}
+        />
+      )}
     </div>
   );
 };
