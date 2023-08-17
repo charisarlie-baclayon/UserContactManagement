@@ -7,23 +7,23 @@ const LoginView = () => {
   const navigate = useNavigate();
   return (
     <>
-      <section class="bg-mainBlack min-h-screen flex items-center justify-center">
-        <div class="bg-darkBlack flex rounded-xl shadow-lg max-w-3xl">
-          <div class="flex flex-col justify-center sm:w-1/2 p-5">
-            <div class="px-16 p-2">
-              <h2 class="text-accentPurple font-bold text-2xl text-center">
+      <section className="bg-mainBlack min-h-screen flex items-center justify-center">
+        <div className="bg-darkBlack flex rounded-xl shadow-lg max-w-3xl">
+          <div className="flex flex-col justify-center sm:w-1/2 p-5">
+            <div className="px-16 p-2">
+              <h2 className="text-accentPurple font-bold text-2xl text-center">
                 Login
               </h2>
-              <p class="text-whiteText text-sm mt-4 text-center">
+              <p className="text-whiteText text-sm mt-4 text-center">
                 If you already a member, easily login.
               </p>
-              <form action="" class="flex flex-col gap-4">
-                <div class="mt-8">
-                  <label htmlFor="username" class="text-whiterText mt-8">
+              <form action="" className="flex flex-col gap-4">
+                <div className="mt-8">
+                  <label htmlFor="username" className="text-whiterText mt-8">
                     Username
                   </label>
                   <input
-                    class="p-2 rounded border w-full bg-wh"
+                    className="p-2 rounded border w-full bg-wh"
                     type="text"
                     name="username"
                     placeholder="username"
@@ -31,11 +31,11 @@ const LoginView = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="password" class="text-whiterText">
+                  <label htmlFor="password" className="text-whiterText">
                     Password
                   </label>
                   <input
-                    class="p-2 rounded border w-full bg-wh"
+                    className="p-2 rounded border w-full bg-wh"
                     type="password"
                     name="password"
                     placeholder="password"
@@ -44,26 +44,26 @@ const LoginView = () => {
 
                 <MainButton text="Login"></MainButton>
               </form>
-              <div class="mt-10 grid grid-cols-3 items-center text-whiteText">
-                <hr class="border-whiteText"></hr>
-                <p class="text-center">OR</p>
-                <hr class="border-whiteText"></hr>
+              <div className="mt-10 grid grid-cols-3 items-center text-whiteText">
+                <hr className="border-whiteText"></hr>
+                <p className="text-center">OR</p>
+                <hr className="border-whiteText"></hr>
               </div>
 
-              <p class="text-whiteText text-sm mt-4 text-center pt-2 pb-2">
+              <p className="text-whiteText text-sm mt-4 text-center pt-2 pb-2">
                 Make an account.
               </p>
               <button
-                class="my-2 bg-transparent border border-accentPurple rounded text-whiteText py-2 w-full transition duration-300 ease-in-out hover:underline hover:scale-105"
+                className="my-2 bg-transparent border border-accentPurple rounded text-whiteText py-2 w-full transition duration-300 ease-in-out hover:underline hover:scale-105"
                 onClick={() => navigate("/register")}
               >
                 Register
               </button>
             </div>
           </div>
-          <div class="sm:block hidden w-1/2 relative">
-            <img class="rounded-e-xl" src={loginPhoto} alt="" />
-            <div class="absolute inset-0 bg-gradient-to-br from-accentPurple to-darkerPurple opacity-30 rounded-xl"></div>
+          <div className="sm:block hidden w-1/2 relative">
+            <img className="rounded-e-xl" src={loginPhoto} alt="" />
+            <div className="absolute inset-0 bg-gradient-to-br from-accentPurple to-darkerPurple opacity-30 rounded-xl"></div>
           </div>
         </div>
       </section>
