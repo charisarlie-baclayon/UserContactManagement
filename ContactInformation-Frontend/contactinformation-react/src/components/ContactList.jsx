@@ -6,6 +6,8 @@ import ContactAddButton from "./ContactAddButton";
 const ContactList = (props) => {
   const token = sessionStorage.getItem("key");
   const [contacts, setContacts] = useState([]);
+  const [selectedContact, setSelectedContact] = useState(null); // Track selected contact
+  const [isPopupOpen, setIsPopupOpen] = useState(false); // Manage popup visibility
 
   useEffect(() => {
     async function fetchContacts() {
@@ -29,6 +31,16 @@ const ContactList = (props) => {
         .includes(props.searchTerm.toLowerCase())
   );
 
+  const openPopup = (contact) => {
+    setSelectedContact(contact);
+    setIsPopupOpen(true);
+  };
+
+  const closePopup = () => {
+    setSelectedContact(null);
+    setIsPopupOpen(false);
+  };
+
   return (
     <>
       <ContactHeader
@@ -44,7 +56,8 @@ const ContactList = (props) => {
           {filteredContacts.map((contact) => (
             <li
               key={contact.emailAddress}
-              className="flex justify-between gap-x-6 py-5"
+              className="flex justify-between gap-x-6 py-5 cursor-pointer"
+              onClick={() => openPopup(contact)}
             >
               <div className="flex min-w-0 gap-x-4">
                 <img
@@ -65,6 +78,20 @@ const ContactList = (props) => {
           ))}
         </ul>
       )}
+
+      {isPopupOpen && selectedContact && (
+        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
+          <div className="bg-white p-4 rounded-lg">
+            <p>
+              {selectedContact.firstName} {selectedContact.lastName}
+            </p>
+            <p>{selectedContact.emailAddress}</p>
+            {/* Add more contact details here */}
+            <button onClick={closePopup}>Close</button>
+          </div>
+        </div>
+      )}
+
       <ContactAddButton
         onClick={() => {
           /* Handle add button click */
