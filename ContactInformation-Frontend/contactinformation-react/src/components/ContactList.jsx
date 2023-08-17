@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import ContactHeader from "./ContactHeader";
-import { getContacts } from "../api/contact/apiContact";
+import { getContacts, updateContact } from "../api/contact/apiContact";
 import ContactAddButton from "./ContactAddButton";
+import ContactPopup from "./ContactPopup";
 
 const ContactList = (props) => {
   const token = sessionStorage.getItem("key");
@@ -12,7 +13,7 @@ const ContactList = (props) => {
   useEffect(() => {
     async function fetchContacts() {
       try {
-        const response = await getContacts(token);
+        const response = await getContacts();
         console.log(response.data);
         setContacts(response.data);
       } catch (error) {
