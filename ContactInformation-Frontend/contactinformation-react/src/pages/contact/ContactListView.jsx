@@ -15,7 +15,6 @@ const ContactListView = () => {
       emailAddress: "john.doe@example.com",
       birthDate: new Date(1990, 5, 15),
       favorite: true,
-      imageUrl: "https://example.com/john_doe.jpg",
     },
     {
       firstName: "Jane",
@@ -30,7 +29,6 @@ const ContactListView = () => {
       emailAddress: "jane.smith@example.com",
       birthDate: new Date(1988, 8, 22),
       favorite: false,
-      imageUrl: "https://example.com/jane_smith.jpg",
     },
     {
       firstName: "Michael",
@@ -45,7 +43,6 @@ const ContactListView = () => {
       emailAddress: "michael.johnson@example.com",
       birthDate: new Date(1995, 2, 10),
       favorite: true,
-      imageUrl: "https://example.com/michael_johnson.jpg",
     },
     {
       firstName: "Emily",
@@ -60,7 +57,6 @@ const ContactListView = () => {
       emailAddress: "emily.williams@example.com",
       birthDate: new Date(1992, 10, 8),
       favorite: true,
-      imageUrl: "https://example.com/emily_williams.jpg",
     },
     {
       firstName: "David",
@@ -75,7 +71,6 @@ const ContactListView = () => {
       emailAddress: "david.brown@example.com",
       birthDate: new Date(1985, 7, 17),
       favorite: false,
-      imageUrl: "https://example.com/david_brown.jpg",
     },
     {
       firstName: "Olivia",
@@ -90,7 +85,6 @@ const ContactListView = () => {
       emailAddress: "olivia.davis@example.com",
       birthDate: new Date(1993, 3, 25),
       favorite: true,
-      imageUrl: "https://example.com/olivia_davis.jpg",
     },
     {
       firstName: "William",
@@ -105,7 +99,6 @@ const ContactListView = () => {
       emailAddress: "william.miller@example.com",
       birthDate: new Date(1991, 11, 5),
       favorite: false,
-      imageUrl: "https://example.com/william_miller.jpg",
     },
     {
       firstName: "Sophia",
@@ -120,7 +113,6 @@ const ContactListView = () => {
       emailAddress: "sophia.wilson@example.com",
       birthDate: new Date(1987, 1, 30),
       favorite: true,
-      imageUrl: "https://example.com/sophia_wilson.jpg",
     },
     {
       firstName: "James",
@@ -135,7 +127,6 @@ const ContactListView = () => {
       emailAddress: "james.moore@example.com",
       birthDate: new Date(1984, 9, 12),
       favorite: false,
-      imageUrl: "https://example.com/james_moore.jpg",
     },
     {
       firstName: "Isabella",
@@ -150,7 +141,6 @@ const ContactListView = () => {
       emailAddress: "isabella.taylor@example.com",
       birthDate: new Date(1989, 6, 3),
       favorite: true,
-      imageUrl: "https://example.com/isabella_taylor.jpg",
     },
   ];
   return (
