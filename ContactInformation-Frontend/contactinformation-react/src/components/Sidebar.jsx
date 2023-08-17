@@ -37,17 +37,17 @@ const Sidebar = () => {
           {Menus.map((menu, index) => (
             <li
               key={index}
-              classNameName={`text-whiterText text-sm flex items-center gap-x-4 pt-4 pb-4 pl-1 cursor-pointer 
+              className={`text-whiterText text-sm flex items-center gap-x-4 pt-4 pb-4 pl-1 cursor-pointer 
       hover:bg-accentPurple rounded-md`}
               onClick={() => navigate(menu.route)}
             >
               <img
                 src={`./src/assets/${menu.src}`}
-                classNameName="w-8"
+                className="w-8"
                 alt={menu.title}
               />
               <span
-                classNameName={`${
+                className={`${
                   !open && "hidden"
                 } origin-left duration-500 text-xl`}
               >
