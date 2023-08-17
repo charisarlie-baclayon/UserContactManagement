@@ -157,7 +157,11 @@ const FavoriteContactListView = () => {
 
   return (
     <>
-      <ContactHeader searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <ContactHeader
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        title="Your Favorites"
+      />
 
       <ul role="list" class="divide-y divide-greyBorder">
         {filteredContacts.map((contact) => (

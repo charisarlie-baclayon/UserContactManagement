@@ -155,7 +155,11 @@ const ContactListView = () => {
 
   return (
     <>
-      <ContactHeader searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <ContactHeader
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        title="Your Contacts"
+      />
 
       <ul role="list" class="divide-y divide-greyBorder">
         {filteredContacts.map((contact) => (
