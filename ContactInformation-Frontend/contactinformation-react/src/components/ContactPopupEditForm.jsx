@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { deleteContact, updateContact } from "../api/contact/apiContact";
 
 const ContactPopupEditForm = (props) => {
   
+  const navigate = useNavigate();
   const [editedContact, setEditedContact] = useState({
     ...props.selectedContact,
   });
@@ -24,22 +27,34 @@ const ContactPopupEditForm = (props) => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    try {
-      await updateContact(editedContact._id, editedContact);
-      // Close the edit form
-      props.closePopup();
-    } catch (error) {
-      console.log(error);
+    const confirmed = window.confirm(
+      "Are you sure you want to update this contact?"
+    );
+    if (confirmed) {
+      try {
+        await updateContact(editedContact.id, editedContact);
+        // Close the edit form
+        props.closePopup();
+        window.location.reload();// Navigate to "/"
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
   const handleDelete = async () => {
-    try {
-      await deleteContact(props.selectedContact._id);
-      // Close the edit form
-      props.closePopup();
-    } catch (error) {
-      console.log(error);
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this contact?"
+    );
+    if (confirmed) {
+      try {
+        await deleteContact(props.selectedContact.id);
+        // Close the edit form
+        props.closePopup();
+        window.location.reload(); // Navigate to "/"
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -65,61 +80,101 @@ const ContactPopupEditForm = (props) => {
             />
           </svg>{" "}
         </button>
-        <button
-          onClick={handleFavoritesToggle}
-          className="absolute top-3 right-16 text-whiteText hover:text-darkerPurple"
-        >
-          {editedContact.favorite
-            ? "Remove from Favorites"
-            : "Add to Favorites"}
-        </button>
-        <div className="flex flex-col items-center mb-4 pt-4">{/* ... */}</div>
-        <form onSubmit={handleFormSubmit}>
-          <div className="flex flex-col gap-y-4">
-            <div className="bg-gray-700 rounded-md p-2">
-              <label htmlFor="firstName" className="text-sm">
-                First Name:
-              </label>
-              <input
-                type="text"
-                id="firstName"
-                name="firstName"
-                value={editedContact.firstName}
-                onChange={handleInputChange}
-                className="text-lg text-whiterText p-1"
-              />
+        <div className="flex flex-col gap-y-2 pt-8">
+          <form onSubmit={handleFormSubmit}>
+            <div className="flex flex-col gap-y-2">
+              <div>
+                <span className="text-sm">First Name:</span>
+                <div className="rounded-md">
+                  {""}
+                  <input
+                    type="text"
+                    name="firstName"
+                    value={editedContact.firstName}
+                    onChange={handleInputChange}
+                    className="text-lg text-whiterText p-1 bg-gray-700 rounded-md w-full"
+                  />
+                </div>
+              </div>
+              <div>
+                <span className="text-sm">Last Name:</span>
+                <div className="rounded-md">
+                  {""}
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={editedContact.lastName}
+                    onChange={handleInputChange}
+                    className="text-lg text-whiterText p-1 bg-gray-700 rounded-md w-full"
+                  />
+                </div>
+              </div>
+              <div>
+                <span className="text-sm">PhoneNumber:</span>
+                <div className="rounded-md">
+                  {""}
+                  <input
+                    type="text"
+                    name="phoneNumber"
+                    value={editedContact.phoneNumber}
+                    onChange={handleInputChange}
+                    className="text-lg text-whiterText p-1 bg-gray-700 rounded-md w-full"
+                  />
+                </div>
+              </div>
+              <div>
+                <span className="text-sm">Email:</span>
+                <div className="rounded-md">
+                  {""}
+                  <input
+                    type="text"
+                    name="emailAddress"
+                    value={editedContact.emailAddress}
+                    onChange={handleInputChange}
+                    className="text-lg text-whiterText p-1 bg-gray-700 rounded-md w-full"
+                  />
+                </div>
+              </div>
+              <div>
+                <span className="text-sm">Birthday:</span>
+                <div className="rounded-md">
+                  {""}
+                  <input
+                    type="date"
+                    name="birthDate"
+                    value={editedContact.birthDate}
+                    onChange={handleInputChange}
+                    className="text-lg text-whiterText p-1 bg-gray-700 rounded-md w-full"
+                  />
+                </div>
+              </div>
             </div>
-            <div className="bg-gray-700 rounded-md p-2">
-              <label htmlFor="lastName" className="text-sm">
-                Last Name:
-              </label>
-              <input
-                type="text"
-                id="lastName"
-                name="lastName"
-                value={editedContact.lastName}
-                onChange={handleInputChange}
-                className="text-lg text-whiterText p-1"
-              />
+            <div className="flex flex-col gap-y-4 mt-8">
+              <button
+                onClick={handleFavoritesToggle}
+                className=" right-16 text-whiteText hover:text-darkerPurple text-lg mb-2"
+              >
+                {editedContact.favorite
+                  ? "Remove from Favorites"
+                  : "Add to Favorites"}
+              </button>
+              <button
+                type="submit"
+                className="bg-darkerPurple text-white px-4 py-2 rounded-lg transition duration-300 ease-in-out hover:scale-105"
+              >
+                Save
+              </button>
+              <button
+                type="button"
+                onClick={handleDelete}
+                className="bg-transparent border border-red-400 text-red-400 px-4 py-2 rounded-lg transition duration-300 ease-in-out hover:underline hover:scale-105"
+              >
+                Delete
+              </button>
             </div>
-            {/* ... Add more form fields here ... */}
-          </div>
-          <div className="flex gap-x-2 mt-4">
-            <button
-              type="submit"
-              className="bg-green-500 text-white px-4 py-2 rounded-lg"
-            >
-              Save
-            </button>
-            <button
-              type="button"
-              onClick={handleDelete}
-              className="bg-red-500 text-white px-4 py-2 rounded-lg"
-            >
-              Delete
-            </button>
-          </div>
-        </form>
+          </form>
+        </div>
+        <div className="flex flex-col items-center mb-4 pt-4"></div>
       </div>
     </div>
   );
