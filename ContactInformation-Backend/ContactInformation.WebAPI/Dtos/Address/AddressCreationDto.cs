@@ -11,6 +11,7 @@ namespace ContactInformation.WebAPI.Dtos.Address
         /// Gets or sets the description of the address.
         /// </summary>
         [Required(ErrorMessage = "Address is required.")]
+        [StringLength(100, MinimumLength = 10, ErrorMessage = "Address description must be between 10 and 100 characters.")]
         public string AddressDescription { get; set; } = string.Empty;
 
         /// <summary>
