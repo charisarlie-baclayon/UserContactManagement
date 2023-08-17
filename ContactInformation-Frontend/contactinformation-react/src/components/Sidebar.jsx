@@ -13,18 +13,11 @@ const Sidebar = () => {
       class={`${open ? "w-72" : "w-20"} 
       p-5 pt-8 duration-300 bg-mainBlack border-r-2 border-greyBorder sticky top-0 h-screen `}
     >
-      <img
-        src={arrow}
-        class={`${
-          !open && "rotate-180"
-        } absolute cursor-pointer -right-3 top-9 w-6 opacity-70`}
-        alt="Arrow"
-        onClick={() => setOpen(!open)}
-      />
       <div class="flex gap-x-4 items-center">
         <img
           src="/contactlogo.png"
           class={`w-8 cursor-pointer duration-500 ${open && "rotate-[360deg]"}`}
+          onClick={() => setOpen(!open)}
         ></img>
         <h1
           class={`text-whiterText origin-left font-medium text-2xl duration-300 ${

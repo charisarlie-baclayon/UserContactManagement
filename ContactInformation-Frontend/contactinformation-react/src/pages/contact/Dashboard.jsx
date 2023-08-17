@@ -1,5 +1,6 @@
 import React from "react";
 import Sidebar from "../../components/Sidebar";
+import Navbar from "../../components/Navbar";
 import ContactList from "./ContactListView";
 
 const Dashboard = () => {
@@ -7,7 +8,7 @@ const Dashboard = () => {
     <>
       <div class="flex bg-mainBlack">
         <Sidebar></Sidebar>
-        <div class="p-8 text-2xl font-semibold flex-1">
+        <div class="px-8 text-2xl font-semibold flex-grow">
           <ContactList></ContactList>
         </div>
       </div>
