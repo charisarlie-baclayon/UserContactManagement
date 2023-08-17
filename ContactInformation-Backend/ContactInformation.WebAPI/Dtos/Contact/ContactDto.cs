@@ -8,6 +8,11 @@ namespace ContactInformation.WebAPI.Dtos.Contact
     public class ContactDto
     {
         /// <summary>
+        /// Gets or sets the id of the contact.
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
         /// Gets or sets the first name of the contact.
         /// </summary>
         public string FirstName { get; set; } = string.Empty;
