@@ -1,14 +1,22 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { deleteContact, updateContact } from "../api/contact/apiContact";
+import { deleteContact, updateContact, createContact } from "../api/contact/apiContact";
 
 const ContactPopupEditForm = (props) => {
-  
   const navigate = useNavigate();
-  const [editedContact, setEditedContact] = useState({
-    ...props.selectedContact,
-  });
+  const [editedContact, setEditedContact] = useState(
+    props.selectedContact || {
+      firstName: "",
+      lastName: "",
+      phoneNumber: "",
+      emailAddress: "",
+      birthDate: "",
+      favorite: false,
+    }
+  );
+
+  const isCreateMode = props.isCreateMode;
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -28,14 +36,20 @@ const ContactPopupEditForm = (props) => {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     const confirmed = window.confirm(
-      "Are you sure you want to update this contact?"
+      `Are you sure you want to ${
+        isCreateMode ? "create" : "update"
+      } this contact?`
     );
     if (confirmed) {
       try {
-        await updateContact(editedContact.id, editedContact);
+        if (isCreateMode) {
+          await createContact(editedContact); // Create a new contact
+        } else {
+          await updateContact(editedContact.id, editedContact); // Update an existing contact
+        }
         // Close the edit form
         props.closePopup();
-        window.location.reload();// Navigate to "/"
+        window.location.reload(); // Navigate to "/"
       } catch (error) {
         console.log(error);
       }

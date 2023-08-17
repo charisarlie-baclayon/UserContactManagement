@@ -2,13 +2,15 @@ import React, { useState, useEffect } from "react";
 import ContactHeader from "./ContactHeader";
 import { getContacts, updateContact } from "../api/contact/apiContact";
 import ContactAddButton from "./ContactAddButton";
-import ContactPopup from "../components/ContactPopup"; 
+import ContactPopup from "../components/ContactPopup";
+import ContactPopupEditForm from "./ContactPopupEditForm";
 
 const ContactList = (props) => {
   const token = sessionStorage.getItem("key");
   const [contacts, setContacts] = useState([]);
   const [selectedContact, setSelectedContact] = useState(null); // Track selected contact
   const [isPopupOpen, setIsPopupOpen] = useState(false); // Manage popup visibility
+  const [isAddButtonClicked, setIsAddButtonClicked] = useState(false);
 
   useEffect(() => {
     async function fetchContacts() {
@@ -40,6 +42,15 @@ const ContactList = (props) => {
   const closePopup = () => {
     setSelectedContact(null);
     setIsPopupOpen(false);
+  };
+  const closePopupOnAdd = () => {
+    setIsAddButtonClicked(false);
+    closePopup();
+  };
+
+  const handleAddButtonClick = () => {
+    setIsAddButtonClicked(true);
+    openPopup(null); // Open the popup with a new contact object
   };
 
   return (
@@ -87,11 +98,15 @@ const ContactList = (props) => {
         />
       )}
 
-      <ContactAddButton
-        onClick={() => {
-          /* Handle add button click */
-        }}
-      />
+      <ContactAddButton onClick={handleAddButtonClick} />
+
+      {isAddButtonClicked && (
+        <ContactPopupEditForm
+          selectedContact={""}
+          isCreateMode={true} // Pass a prop to indicate create mode
+          closePopup={closePopupOnAdd}
+        />
+      )}
     </>
   );
 };
