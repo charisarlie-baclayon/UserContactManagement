@@ -10,7 +10,7 @@ export default {
         whiteText: "#9ca3af",
         greyBorder: "#4b5563",
         accentPurple: "#390e53",
-        darkerPurple: "#390e53",
+        darkerPurple: "#e859e9",
         midPurple: "#642E8F",
       },
     },

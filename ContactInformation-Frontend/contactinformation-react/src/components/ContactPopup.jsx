@@ -3,10 +3,10 @@ import React from "react";
 const ContactPopup = (props) => {
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
-      <div className="bg-gray-800 p-5 rounded-lg text-white relative w-96">
+      <div className="relative bg-gray-800 p-5 rounded-lg text-white w-full max-w-md mx-auto md:w-96">
         <button
           onClick={props.closePopup}
-          className="absolute top-3 right-3 text-gray-300"
+          className="absolute top-3 left-3 text-whiteText hover:text-darkerPurple"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -21,7 +21,15 @@ const ContactPopup = (props) => {
               strokeWidth={2}
               d="M6 18L18 6M6 6l12 12"
             />
-          </svg>
+          </svg>{" "}
+        </button>
+        <button
+          onClick={() => {
+            // Handle edit action
+          }}
+          className="absolute top-3 right-3 text-whiteText hover:text-darkerPurple"
+        >
+          Edit
         </button>
         <div className="flex flex-col items-center mb-4 pt-4">
           <img
@@ -36,7 +44,7 @@ const ContactPopup = (props) => {
         <div className="flex flex-col gap-y-4">
           <div className=" bg-gray-700 rounded-md p-2">
             <span className="text-sm">Email:</span>{" "}
-            <p className=" text-lg text-whiterText">
+            <p className="text-lg text-whiterText">
               {props.selectedContact.emailAddress}
             </p>
           </div>
@@ -46,7 +54,7 @@ const ContactPopup = (props) => {
           </div>
           <div className=" bg-gray-700 rounded-md p-2">
             <span className="text-sm">Birthday:</span>{" "}
-            <p className=" text-lg">
+            <p className="text-lg">
               {new Date(props.selectedContact.birthDate).toLocaleDateString(
                 undefined,
                 {
