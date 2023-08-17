@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ContactPopupEditForm from "./ContactPopupEditForm";
+import ContactAddress from "./ContactAddress"; 
 
 const ContactPopup = (props) => {
   const [isEditFormOpen, setIsEditFormOpen] = useState(false);
@@ -70,19 +71,7 @@ const ContactPopup = (props) => {
               )}
             </p>
           </div>
-          <div className=" bg-gray-700 rounded-md p-2">
-            <span className="text-base">Addresses:</span>{" "}
-            <ul className="">
-              {props.selectedContact.addresses.map((address, index) => (
-                <li key={index} className="mb-2">
-                  <p className="text-sm text-whiteText">
-                    {address.addressType}
-                  </p>
-                  <p className="text-lg">{address.addressDescription}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <ContactAddress addresses={props.selectedContact.addresses} />
         </div>
       </div>
       {isEditFormOpen && (
