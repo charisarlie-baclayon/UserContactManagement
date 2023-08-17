@@ -2,14 +2,21 @@ import axios from "axios";
 
 const API_BASE_URL = "https://localhost:7038";
 
-export const getContacts = async (token) => {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
+const api = axios.create({
+  baseURL: API_BASE_URL,
+});
+
+api.interceptors.request.use((config) => {
+  const token = sessionStorage.getItem("key");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+export const getContacts = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/api/contacts`, config);
+    const response = await api.get("/api/contacts");
     console.log(response);
     return response;
   } catch (error) {
@@ -20,10 +27,7 @@ export const getContacts = async (token) => {
 
 export const createContact = async (contactData) => {
   try {
-    const response = await axios.post(
-      `${API_BASE_URL}/api/contacts`,
-      contactData
-    );
+    const response = await api.post("/api/contacts", contactData);
     console.log(response);
     return response;
   } catch (error) {
@@ -34,10 +38,7 @@ export const createContact = async (contactData) => {
 
 export const updateContact = async (contactId, contactData) => {
   try {
-    const response = await axios.put(
-      `${API_BASE_URL}/api/contacts/${contactId}`,
-      contactData
-    );
+    const response = await api.put(`/api/contacts/${contactId}`, contactData);
     console.log(response);
     return response;
   } catch (error) {
@@ -48,9 +49,7 @@ export const updateContact = async (contactId, contactData) => {
 
 export const deleteContact = async (contactId) => {
   try {
-    const response = await axios.delete(
-      `${API_BASE_URL}/api/contacts/${contactId}`
-    );
+    const response = await api.delete(`/api/contacts/${contactId}`);
     console.log(response);
     return response;
   } catch (error) {
@@ -58,3 +57,5 @@ export const deleteContact = async (contactId) => {
     throw error;
   }
 };
+
+export default api;
