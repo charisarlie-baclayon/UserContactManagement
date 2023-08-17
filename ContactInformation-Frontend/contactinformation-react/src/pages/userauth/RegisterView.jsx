@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerUser, loginUser } from "../../api/auth/apiAuth";
 
@@ -18,6 +18,14 @@ const RegisterView = () => {
       [name]: value,
     }));
   };
+
+  useEffect(() => {
+    const sessionKey = sessionStorage.getItem("key");
+
+    if (sessionKey) {
+      navigate("/");
+    }
+  }, []);
 
   const handleRegister = async (e) => {
     e.preventDefault();

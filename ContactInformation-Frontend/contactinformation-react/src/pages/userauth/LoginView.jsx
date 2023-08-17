@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MainButton from "../../components/MainButton";
 import loginPhoto from "../../assets/loginphoto.jpg";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +16,14 @@ const LoginView = () => {
     sessionStorage.setItem("key", response.data);
     navigate("/");
   };
+
+  useEffect(() => {
+    const sessionKey = sessionStorage.getItem("key");
+
+    if (sessionKey) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <>
