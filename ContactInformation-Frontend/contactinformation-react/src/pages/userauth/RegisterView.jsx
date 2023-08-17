@@ -58,7 +58,7 @@ const RegisterView = () => {
       <div className="bg-darkBlack flex rounded-xl shadow-lg max-w-3xl">
         <div className="flex justify-center p-5">
           <div className="px-16 p-2">
-            <h2 className="text-accentPurple font-bold text-2xl text-center">
+            <h2 className="text-darkerPurple font-bold text-2xl text-center">
               Register
             </h2>
             <p className="text-whiteText text-sm mt-4 text-center">
@@ -150,11 +150,11 @@ const RegisterView = () => {
               </div>
               <hr class="border-none "></hr>
               <div className="flex justify-between">
-                <button className="m-2 w-1/2 bg-accentPurple rounded text-darkBlack py-2 font-bold transition duration-300 ease-in-out hover:underline hover:scale-105">
+                <button className="m-2 w-1/2 bg-darkerPurple rounded text-darkBlack py-2 font-bold transition duration-300 ease-in-out hover:underline hover:scale-105">
                   Register
                 </button>
                 <button
-                  className="m-2 w-1/2 bg-transparent border border-accentPurple rounded text-whiteText py-2 font-bold transition duration-300 ease-in-out hover:underline hover:scale-105"
+                  className="m-2 w-1/2 bg-transparent border border-darkerPurple rounded text-whiteText py-2 font-bold transition duration-300 ease-in-out hover:underline hover:scale-105"
                   onClick={() => navigate("/login")}
                 >
                   Cancel

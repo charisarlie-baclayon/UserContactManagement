@@ -9,12 +9,18 @@ const Sidebar = () => {
   const Menus = [
     { title: "Contacts", src: "contact.svg", route: "/" },
     { title: "Favorites", src: "favorite.svg", route: "/favorites" },
-    { title: "Settings", src: "settings.svg", route: "/settings" },
+    { title: "Logout", src: "settings.svg" },
   ];
   const handleOutsideClick = (e) => {
     if (sidebarRef.current && !sidebarRef.current.contains(e.target)) {
       setOpen(false);
     }
+  };
+  const handleLogout = () => {
+    // Clear the "key" sessionStorage before logging out
+    sessionStorage.removeItem("key");
+    // Redirect to the logout page
+    navigate("/login");
   };
 
   useEffect(() => {
@@ -63,7 +69,9 @@ const Sidebar = () => {
               key={index}
               className={`text-whiterText text-sm flex items-center gap-x-4 pt-4 pb-4 pl-1 cursor-pointer 
       hover:bg-accentPurple rounded-md`}
-              onClick={() => navigate(menu.route)}
+              onClick={() =>
+                menu.title === "Logout" ? handleLogout() : navigate(menu.route)
+              }
             >
               <img
                 src={`./src/assets/${menu.src}`}

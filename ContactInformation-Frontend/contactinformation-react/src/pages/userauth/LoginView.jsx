@@ -31,7 +31,7 @@ const LoginView = () => {
         <div className="bg-darkBlack flex rounded-xl shadow-lg max-w-3xl">
           <div className="flex flex-col justify-center sm:w-1/2 p-5">
             <div className="px-16 p-2">
-              <h2 className="text-accentPurple font-bold text-2xl text-center">
+              <h2 className="text-darkerPurple font-bold text-2xl text-center">
                 Login
               </h2>
               <p className="text-whiteText text-sm mt-4 text-center">
@@ -82,7 +82,7 @@ const LoginView = () => {
                 Make an account.
               </p>
               <button
-                className="my-2 bg-transparent border border-accentPurple rounded text-whiteText py-2 w-full transition duration-300 ease-in-out hover:underline hover:scale-105"
+                className="my-2 bg-transparent border border-darkerPurple rounded text-whiteText py-2 w-full transition duration-300 ease-in-out hover:underline hover:scale-105"
                 onClick={() => navigate("/register")}
               >
                 Register
@@ -91,7 +91,7 @@ const LoginView = () => {
           </div>
           <div className="sm:block hidden w-1/2 relative">
             <img className="rounded-e-xl" src={loginPhoto} alt="" />
-            <div className="absolute inset-0 bg-gradient-to-br from-accentPurple to-darkerPurple opacity-30 rounded-xl"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-darkerPurple to-darkerPurple opacity-30 rounded-xl"></div>
           </div>
         </div>
       </section>
