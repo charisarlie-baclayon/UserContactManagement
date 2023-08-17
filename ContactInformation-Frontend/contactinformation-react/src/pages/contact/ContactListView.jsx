@@ -165,7 +165,7 @@ const ContactListView = () => {
           >
             <div class="flex min-w-0 gap-x-4">
               <img
-                class="h-12 w-12 flex-none rounded-full bg-gray-50"
+                class="h-12 w-12 flex-none rounded-full"
                 src="../src/assets/people.png"
                 alt=""
               />
@@ -173,7 +173,7 @@ const ContactListView = () => {
                 <p class="text-sm font-semibold leading-6 text-whiterText">
                   {contact.firstName} {contact.lastName}
                 </p>
-                <p class="mt-1 truncate text-xs leading-5 text-gray-500">
+                <p class="mt-1 truncate text-xs leading-5 text-whiteText">
                   {contact.emailAddress}
                 </p>
               </div>

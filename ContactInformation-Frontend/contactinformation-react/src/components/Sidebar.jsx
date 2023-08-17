@@ -11,7 +11,7 @@ const Sidebar = () => {
   return (
     <div
       class={`${open ? "w-72" : "w-20"} 
-      p-5 pt-8 duration-300 bg-mainBlack border-r-2 border-greyBorder relative`}
+      p-5 pt-8 duration-300 bg-mainBlack border-r-2 border-greyBorder sticky top-0 h-screen `}
     >
       <img
         src={arrow}
