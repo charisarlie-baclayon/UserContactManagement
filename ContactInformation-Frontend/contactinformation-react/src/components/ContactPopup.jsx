@@ -1,12 +1,18 @@
 import React, { useState } from "react";
 import ContactPopupEditForm from "./ContactPopupEditForm";
 import ContactAddress from "./ContactAddress"; 
+import AddressForm from "./AddressForm";
 
 const ContactPopup = (props) => {
   const [isEditFormOpen, setIsEditFormOpen] = useState(false);
+  const [isAddressFormOpen, setIsAddressFormOpen] = useState(false);
 
   const handleEditClick = () => {
     setIsEditFormOpen(true);
+  };
+
+  const handleAddressEditClick = () => {
+    setIsAddressFormOpen(true);
   };
 
   return (
@@ -71,13 +77,23 @@ const ContactPopup = (props) => {
               )}
             </p>
           </div>
-          <ContactAddress addresses={props.selectedContact.addresses} />
+          <ContactAddress
+            addresses={props.selectedContact.addresses}
+            onEditClick={handleAddressEditClick}
+            contactId={props.selectedContact.id} // Pass the handler here
+          />
         </div>
       </div>
       {isEditFormOpen && (
         <ContactPopupEditForm
           selectedContact={props.selectedContact}
           closePopup={() => setIsEditFormOpen(false)}
+        />
+      )}
+      {isAddressFormOpen && (
+        <AddressForm
+          contactId={props.selectedContact.id} // Pass the contact ID
+          closePopup={() => setIsAddressFormOpen(false)} // Pass the close handler
         />
       )}
     </div>

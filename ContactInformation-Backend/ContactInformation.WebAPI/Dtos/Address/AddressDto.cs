@@ -6,6 +6,11 @@
     public class AddressDto
     {
         /// <summary>
+        /// Gets or sets the id of the address.
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
         /// Gets or sets the description of the address.
         /// </summary>
         public string AddressDescription { get; set; } = string.Empty;
