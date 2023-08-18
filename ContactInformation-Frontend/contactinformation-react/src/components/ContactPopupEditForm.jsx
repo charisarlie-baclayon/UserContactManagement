@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { deleteContact, updateContact, createContact } from "../api/contact/apiContact";
+import {
+  deleteContact,
+  updateContact,
+  createContact,
+} from "../api/contact/apiContact";
 
 const ContactPopupEditForm = (props) => {
   const navigate = useNavigate();
@@ -33,8 +37,7 @@ const ContactPopupEditForm = (props) => {
     }));
   };
 
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
+  const handleFormSubmit = async () => {
     const confirmed = window.confirm(
       `Are you sure you want to ${
         isCreateMode ? "create" : "update"
@@ -49,7 +52,7 @@ const ContactPopupEditForm = (props) => {
         }
         // Close the edit form
         props.closePopup();
-        window.location.reload(); // Navigate to "/"
+        window.location.reload();
       } catch (error) {
         console.log(error);
       }
