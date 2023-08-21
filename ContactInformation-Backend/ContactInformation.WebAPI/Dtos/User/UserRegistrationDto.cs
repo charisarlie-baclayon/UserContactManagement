@@ -31,6 +31,14 @@ namespace ContactInformation.WebAPI.Dtos.User
         public string Username { get; set; } = string.Empty;
 
         /// <summary>
+        /// Gets or sets the email of the user.
+        /// </summary>
+        [Required(ErrorMessage = "Email is required.")]
+        [EmailAddress(ErrorMessage = "Invalid email address.")]
+        [StringLength(100, ErrorMessage = "Email must not exceed 100 characters.")]
+        public string Email { get; set; } = string.Empty;
+
+        /// <summary>
         /// Gets or sets the password of the user.
         /// </summary>
         [Required(ErrorMessage = "Password is required.")]

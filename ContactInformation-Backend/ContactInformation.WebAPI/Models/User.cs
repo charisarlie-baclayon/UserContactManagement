@@ -32,6 +32,11 @@ namespace ContactInformation.WebAPI.Models
         public string Username { get; set; } = string.Empty;
 
         /// <summary>
+        /// Gets or sets the email of the user.
+        /// </summary>
+        public string Email { get; set; } = string.Empty;
+
+        /// <summary>
         /// Gets or sets the password hash for the user.
         /// </summary>
         public byte[] PasswordHash { get; set; }

@@ -87,6 +87,7 @@ namespace ContactInformation.WebAPI.Services.UserService
             userModel.FirstName = userToUpdate.FirstName;
             userModel.LastName = userToUpdate.LastName;
             userModel.Username = userToUpdate.Username;
+            userModel.Email = userToUpdate.Email;
             userModel.PasswordHash = passwordHash;
             userModel.PasswordSalt = passwordSalt;
 
