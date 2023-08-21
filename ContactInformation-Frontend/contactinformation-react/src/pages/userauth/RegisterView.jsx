@@ -110,14 +110,14 @@ const RegisterView = () => {
       e.preventDefault();
     }
 
-    const response = await loginUser(
-      registrationData.username,
-      registrationData.password
-    );
+    // const response = await loginUser(
+    //   registrationData.username,
+    //   registrationData.password
+    // );
 
-    console.log(response.data);
-    sessionStorage.setItem("key", response.data);
-    navigate("/");
+    // console.log(response.data);
+    // sessionStorage.setItem("key", response.data);
+    navigate("/login");
     window.location.reload();
   };
 
