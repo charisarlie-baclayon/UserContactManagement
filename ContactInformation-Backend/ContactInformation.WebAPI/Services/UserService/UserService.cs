@@ -3,6 +3,7 @@ using ContactInformation.WebAPI.Dtos.User;
 using ContactInformation.WebAPI.Exceptions;
 using ContactInformation.WebAPI.Models;
 using ContactInformation.WebAPI.Repositories.UserRepository;
+using ContactInformation.WebAPI.Services.AuditTrailService;
 using System.Security.Claims;
 using System.Security.Cryptography;
 
@@ -16,6 +17,7 @@ namespace ContactInformation.WebAPI.Services.UserService
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IAuditTrailService _auditTrailService;
 
         /// <summary>
         /// Initializes a new instance of the UserService class.
@@ -23,22 +25,26 @@ namespace ContactInformation.WebAPI.Services.UserService
         /// <param name="mapper">An instance of AutoMapper.</param>
         /// <param name="userRepository">An instance of the user repository.</param>
         /// <param name="httpContextAccessor">An instance of IHttpContextAccessor for accessing the HttpContext.</param>
-        public UserService(IMapper mapper, IUserRepository userRepository, IHttpContextAccessor httpContextAccessor)
+        /// <param name="auditTrailService">An instance of IAuditTrailService for accessing the AuditTrailService.</param>
+        public UserService(IMapper mapper, IUserRepository userRepository, IHttpContextAccessor httpContextAccessor, IAuditTrailService auditTrailService)
         {
             _mapper = mapper;
             _userRepository = userRepository;
             _httpContextAccessor = httpContextAccessor;
+            _auditTrailService = auditTrailService;
         }
 
         /// <inheritdoc/>
         public async Task<int> CreateUser(User newUser)
         {
             var user = await _userRepository.GetUser(newUser);
-            if(user != null)
+            if (user != null)
             {
                 return 0;
             }
-            return await _userRepository.CreateUser(newUser);
+            var newUserId = await _userRepository.CreateUser(newUser);
+            await _auditTrailService.LogAuditTrail("Create", "Contact", newUserId);
+            return newUserId;
         }
 
         /// <inheritdoc/>
@@ -49,6 +55,7 @@ namespace ContactInformation.WebAPI.Services.UserService
             {
                 throw new UserDeletionFailedException("Address deletion failed.");
             }
+            await _auditTrailService.LogAuditTrail("Delete", "Contact", userId);
             return res;
         }
 
@@ -97,6 +104,7 @@ namespace ContactInformation.WebAPI.Services.UserService
                 throw new UserUpdateFailedException("User update failed.");
             }
 
+            await _auditTrailService.LogAuditTrail("Update", "Contact", userId);
             return _mapper.Map<UserDto>(newUserResponse);
         }
 
