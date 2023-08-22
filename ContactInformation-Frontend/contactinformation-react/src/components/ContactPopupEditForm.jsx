@@ -183,7 +183,9 @@ const ContactPopupEditForm = (props) => {
       }
     } catch (error) {
       console.log("An error occurred:", error);
-      // Handle other types of errors, e.g., setErrorState("An error occurred. Please try again.");
+      setValidationErrors({
+        success: "Something went wrong.",
+      });
     }
   };
 
@@ -198,29 +200,29 @@ const ContactPopupEditForm = (props) => {
         props.closePopup();
         window.location.reload();
       } catch (error) {
-         if (error.response) {
-           if (error.response.status === 404) {
-             console.error("Contact not found");
-             setValidationErrors({
-               success: "Contact does not exist.",
-             });
-           } else if (error.response.status === 500) {
-             console.error("Server error");
-             setValidationErrors({
-               success: "Something went wrong.",
-             });
-           } else {
-             console.error("Unknown error occurred");
-             setValidationErrors({
-               success: "Something went wrong.",
-             });
-           }
-         } else {
-           console.error("An error occurred:", error);
-           setValidationErrors({
-             success: "Something went wrong.",
-           });
-         }
+        if (error.response) {
+          if (error.response.status === 404) {
+            console.error("Contact not found");
+            setValidationErrors({
+              success: "Contact does not exist.",
+            });
+          } else if (error.response.status === 500) {
+            console.error("Server error");
+            setValidationErrors({
+              success: "Something went wrong.",
+            });
+          } else {
+            console.error("Unknown error occurred");
+            setValidationErrors({
+              success: "Something went wrong.",
+            });
+          }
+        } else {
+          console.error("An error occurred:", error);
+          setValidationErrors({
+            success: "Something went wrong.",
+          });
+        }
       }
     }
   };
