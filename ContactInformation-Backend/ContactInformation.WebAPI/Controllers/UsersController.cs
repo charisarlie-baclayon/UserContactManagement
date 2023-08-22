@@ -92,6 +92,7 @@ namespace ContactInformation.WebAPI.Controllers
         ///         "firstName": "UpdatedFirstName",
         ///         "lastName": "UpdatedLastName",
         ///         "username": "newusername",
+        ///         "email": "user@email.com",
         ///         "password": "newpassword",
         ///         "confirmPassword": "newpassword"
         ///     }
