@@ -9,7 +9,7 @@ const Sidebar = () => {
   const Menus = [
     { title: "Contacts", src: "contact.svg", route: "/" },
     { title: "Favorites", src: "favorite.svg", route: "/favorites" },
-    { title: "Logout", src: "settings.svg" },
+    { title: "Settings", src: "settings.svg", route: "/settings"},
   ];
   const handleOutsideClick = (e) => {
     if (sidebarRef.current && !sidebarRef.current.contains(e.target)) {
@@ -69,8 +69,7 @@ const Sidebar = () => {
               key={index}
               className={`text-whiterText text-sm flex items-center gap-x-4 pt-4 pb-4 pl-1 cursor-pointer 
       hover:bg-accentPurple rounded-md`}
-              onClick={() =>
-                menu.title === "Logout" ? handleLogout() : navigate(menu.route)
+              onClick={() => navigate(menu.route)
               }
             >
               <img
