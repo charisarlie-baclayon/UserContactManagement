@@ -6,15 +6,74 @@ import { loginUser } from "../../api/auth/apiAuth";
 
 const LoginView = () => {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [loginData, setLoginData] = useState({
+    username: "",
+    password: "",
+  });
+  const [validationErrors, setValidationErrors] = useState({
+    username: "",
+    password: "",
+    success: "",
+  });
+
+  const validate = () => {
+    const errors = {};
+    if (!loginData.username) {
+      errors.username = "Username is required.";
+    }
+    if (!loginData.password) {
+      errors.password = "Password is required.";
+    }
+    return Object.keys(errors).length === 0 ? null : errors;
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setLoginData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const response = await loginUser(username, password);
-    console.log(response.data);
-    sessionStorage.setItem("key", response.data);
-    navigate("/");
+    const errors = validate();
+    if (errors) {
+      setValidationErrors(errors);
+    } else {
+      const errors = {
+        username: "",
+        password: "",
+      };
+      setValidationErrors(errors);
+      try {
+        const response = await loginUser(
+          loginData.username,
+          loginData.password
+        );
+
+        if (response.status === 200) {
+          const token = response.data;
+          console.log(token);
+          sessionStorage.setItem("key", token);
+          navigate("/");
+        }
+      } catch (error) {
+      if (error.response) {
+        if (error.response.status === 401) {
+          // Unauthorized (Invalid credentials)
+          setValidationErrors({
+            success: "Invalid username or password.",
+          });
+        } else if (error.response.status === 500) {
+          // Server error
+          console.error("Server error:", error.response.data);
+        }
+      } else {
+        console.error("Error during login:", error);
+      }
+    }
+  }
   };
 
   useEffect(() => {
@@ -51,9 +110,12 @@ const LoginView = () => {
                     type="text"
                     name="username"
                     placeholder="username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    value={loginData.username}
+                    onChange={handleChange}
                   ></input>
+                  <div className="text-red-500 text-sm">
+                    {validationErrors.username}
+                  </div>
                 </div>
 
                 <div>
@@ -65,12 +127,18 @@ const LoginView = () => {
                     type="password"
                     name="password"
                     placeholder="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    value={loginData.password}
+                    onChange={handleChange}
                   ></input>
+                  <div className="text-red-500 text-sm">
+                    {validationErrors.password}
+                  </div>
                 </div>
 
                 <MainButton text="Login"></MainButton>
+                <div className="text-red-500 text-sm">
+                  {validationErrors.success}
+                </div>
               </form>
               <div className="mt-10 grid grid-cols-3 items-center text-whiteText">
                 <hr className="border-whiteText"></hr>
