@@ -158,34 +158,31 @@ const ContactPopupEditForm = (props) => {
                     });
                   } else if (response.status === 500) {
                     console.error("Server error:", error.response.data);
-                    setValidationErrors({
-                      success: "Something went wrong.",
-                    });
                   } else {
                     console.error(
                       "Unknown error occured during updation:",
                       error
                     );
-                    setValidationErrors({
-                      success: "Something went wrong.",
-                    });
+                    // setValidationErrors({
+                    //   success: "Something went wrong.",
+                    // });
                   }
                 }
               }
             }
           } catch (error) {
             console.log("An unknow error occurred:", error);
-            setValidationErrors({
-              success: "Something went wrong.",
-            });
+            // setValidationErrors({
+            //   success: "Something went wrong.",
+            // });
           }
         }
       }
     } catch (error) {
       console.log("An error occurred:", error);
-      setValidationErrors({
-        success: "Something went wrong.",
-      });
+      // setValidationErrors({
+      //   success: "Something went wrong.",
+      // });
     }
   };
 
@@ -322,6 +319,7 @@ const ContactPopupEditForm = (props) => {
                   {""}
                   <input
                     type="date"
+                    pattern="\d{4}-\d{2}-\d{2}"
                     name="birthDate"
                     value={editedContact.birthDate}
                     onChange={handleInputChange}
