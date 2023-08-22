@@ -69,70 +69,74 @@ const AddressForm = (props) => {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
+    let allValid = true;
+    let validationErrors = {};
+
+    for (const address of addresses) {
+      const errors = validate(address);
+
+      if (errors) {
+        validationErrors = errors;
+        allValid = false;
+        break; // No need to continue checking if any address is invalid
+      }
+    }
+
+    if (!allValid) {
+      setValidationErrors(validationErrors);
+      return;
+    }
+
     const confirmed = window.confirm(
       "Are you sure you want to submit this address?"
     );
 
     if (confirmed) {
       try {
-        let allValid = true;
+        setValidationErrors({});
 
-        for (const address of addresses) {
-          const errors = validate(address);
+        if (selectedAddressIndex !== -1) {
+          // Update existing address
+          const updatedAddress = addresses[selectedAddressIndex];
 
-          if (errors) {
-            setValidationErrors(errors);
-            allValid = false;
-            break; // No need to continue checking if any address is invalid
-          }
-        }
+          try {
+            const response = await updateAddress(
+              props.contactId,
+              updatedAddress.id,
+              updatedAddress
+            );
 
-        if (allValid) {
-          setValidationErrors({});
-
-          if (selectedAddressIndex !== -1) {
-            // Update existing address
-            const updatedAddress = addresses[selectedAddressIndex];
-
-            try {
-              const response = await updateAddress(
-                props.contactId,
-                updatedAddress.id,
-                updatedAddress
-              );
-
-              if (response.status === 200) {
-                console.log("Address updated:", response.data);
-                // Handle successful form submission
-                window.location.reload();
-                props.closePopup();
-              }
-            } catch (error) {
-              handleApiError(error);
-            }
-          } else {
-            // Create new addresses
-            try {
-              for (const address of addresses) {
-                const response = await createAddress(props.contactId, address);
-
-                if (response.status === 200) {
-                  console.log("Address created:", response.data);
-                } else {
-                  console.error("Unexpected response:", response);
-                }
-              }
-
+            if (response.status === 200) {
+              console.log("Address updated:", response.data);
               // Handle successful form submission
               window.location.reload();
               props.closePopup();
-            } catch (error) {
-              handleApiError(error);
             }
+          } catch (error) {
+            handleApiError(error);
           }
-          window.location.reload();
-          props.closePopup();
+        } else {
+          // Create new addresses
+          try {
+            for (const address of addresses) {
+              const response = await createAddress(props.contactId, address);
+
+              if (response.status === 200) {
+                console.log("Address created:", response.data);
+              } else {
+                console.error("Unexpected response:", response);
+              }
+            }
+
+            // Handle successful form submission
+            window.location.reload();
+            props.closePopup();
+          } catch (error) {
+            handleApiError(error);
+          }
         }
+        window.location.reload();
+        props.closePopup();
       } catch (error) {
         console.log("An error occurred:", error);
         setValidationErrors({
@@ -141,6 +145,7 @@ const AddressForm = (props) => {
       }
     }
   };
+
 
   const handleApiError = (error) => {
     if (error.response) {
