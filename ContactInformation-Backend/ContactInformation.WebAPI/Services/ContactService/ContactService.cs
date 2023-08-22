@@ -3,6 +3,7 @@ using ContactInformation.WebAPI.Dtos.Contact;
 using ContactInformation.WebAPI.Exceptions;
 using ContactInformation.WebAPI.Models;
 using ContactInformation.WebAPI.Repositories.ContactRepository;
+using ContactInformation.WebAPI.Services.AuditTrailService;
 
 namespace ContactInformation.WebAPI.Services.ContactService
 {
@@ -13,16 +14,18 @@ namespace ContactInformation.WebAPI.Services.ContactService
     {
         private readonly IMapper _mapper;
         private readonly IContactRepository _contactRepository;
+        private readonly IAuditTrailService _auditTrailService;
 
         /// <summary>
         /// Initializes a new instance of the ContactService class.
         /// </summary>
         /// <param name="mapper">AutoMapper instance for mapping between DTOs and models.</param>
         /// <param name="contactRepository">Repository for data access operations on contacts.</param>
-        public ContactService(IMapper mapper, IContactRepository contactRepository)
+        public ContactService(IMapper mapper, IContactRepository contactRepository, IAuditTrailService auditTrailService)
         {
             _mapper = mapper;
             _contactRepository = contactRepository;
+            _auditTrailService = auditTrailService;
         }
 
 
@@ -37,6 +40,8 @@ namespace ContactInformation.WebAPI.Services.ContactService
             {
                 throw new ContactCreationFailedException("Contact creation failed.");
             }
+
+            await _auditTrailService.LogAuditTrail("Create", "Contact", contactId);
             return contactId;
         }
 
@@ -48,6 +53,8 @@ namespace ContactInformation.WebAPI.Services.ContactService
             {
                 throw new ContactDeletionFailedException("Contact deletion failed.");
             }
+
+            await _auditTrailService.LogAuditTrail("Delete", "Contact", contactId);
             return true;
         }
 
@@ -88,6 +95,8 @@ namespace ContactInformation.WebAPI.Services.ContactService
             {
                 throw new ContactUpdateFailedException("Contact update failed.");
             }
+
+            await _auditTrailService.LogAuditTrail("Update", "Contact", contactId);
             return result!;
         }
 
