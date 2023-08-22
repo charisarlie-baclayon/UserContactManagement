@@ -46,7 +46,10 @@ const RegisterView = () => {
       if (errors) {
         setValidationErrors(errors);
       } else {
-        setValidationErrors({});
+        const confirmed = window.confirm("Are you sure you want to register?");
+        if (confirmed) {
+          setValidationErrors({});
+        }
 
         try {
           const response = await registerUser(registrationData);

@@ -20,7 +20,64 @@ const ContactPopupEditForm = (props) => {
     }
   );
 
+  const [validationErrors, setValidationErrors] = useState({
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    emailAddress: "",
+    birthDate: "",
+    favorite: "",
+    success: "",
+  });
+
   const isCreateMode = props.isCreateMode;
+
+  const validate = () => {
+    const errors = {};
+
+    if (!editedContact.firstName) {
+      errors.firstName = "First name is required.";
+    } else if (
+      editedContact.firstName.length < 2 ||
+      editedContact.firstName.length > 50
+    ) {
+      errors.firstName = "First name must be between 2 and 50 characters.";
+    }
+
+    if (!editedContact.lastName) {
+      errors.lastName = "Last name is required.";
+    } else if (
+      editedContact.lastName.length < 2 ||
+      editedContact.lastName.length > 50
+    ) {
+      errors.lastName = "Last name must be between 2 and 50 characters.";
+    }
+
+    // Validate phoneNumber
+    if (!editedContact.phoneNumber) {
+      errors.phoneNumber = "Phone number is required.";
+    } else if (!/^\d{11}$/.test(editedContact.phoneNumber)) {
+      errors.phoneNumber = "Phone number must be an 11-digit number.";
+    }
+
+    // Validate emailAddress
+    if (!editedContact.emailAddress) {
+      errors.emailAddress = "Email address is required.";
+    } else if (
+      !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+        editedContact.emailAddress
+      )
+    ) {
+      errors.emailAddress = "Invalid email address.";
+    }
+
+    // Validate birthDate
+    if (!editedContact.birthDate) {
+      errors.birthDate = "Birth date is required.";
+    }
+
+    return Object.keys(errors).length === 0 ? null : errors;
+  };
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -37,25 +94,96 @@ const ContactPopupEditForm = (props) => {
     }));
   };
 
-  const handleFormSubmit = async () => {
-    const confirmed = window.confirm(
-      `Are you sure you want to ${
-        isCreateMode ? "create" : "update"
-      } this contact?`
-    );
-    if (confirmed) {
-      try {
-        if (isCreateMode) {
-          await createContact(editedContact); // Create a new contact
-        } else {
-          await updateContact(editedContact.id, editedContact); // Update an existing contact
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const errors = validate();
+      if (errors) {
+        setValidationErrors(errors);
+      } else {
+        setValidationErrors({});
+        const confirmed = window.confirm(
+          `Are you sure you want to ${
+            isCreateMode ? "create" : "update"
+          } this contact?`
+        );
+        if (confirmed) {
+          try {
+            if (isCreateMode) {
+              try {
+                const response = await createContact(editedContact);
+                if (response.status === 200) {
+                  console.log("Contact created:", response.data);
+                  // Close the edit form
+                  props.closePopup();
+                  window.location.reload();
+                }
+              } catch (error) {
+                if (error.response) {
+                  if (error.response.status === 500) {
+                    console.error("Server error:", error.response.data);
+                    setValidationErrors({
+                      success: "Something went wrong.",
+                    });
+                  } else {
+                    console.error(
+                      "Unknown error occured during creation:",
+                      error
+                    );
+                    setValidationErrors({
+                      success: "Something went wrong.",
+                    });
+                  }
+                }
+              }
+            } else {
+              try {
+                const response = await updateContact(
+                  editedContact.id,
+                  editedContact
+                );
+                if (response.status === 200) {
+                  console.log("Contact updated:", response.data);
+                  // Close the edit form
+                  props.closePopup();
+                  window.location.reload();
+                }
+              } catch (error) {
+                if (error.response) {
+                  if (error.response === 404) {
+                    console.error("Contact not found:", error);
+                    console.error("Error during registration:", error);
+                    setValidationErrors({
+                      success: "Contact not found.",
+                    });
+                  } else if (response.status === 500) {
+                    console.error("Server error:", error.response.data);
+                    setValidationErrors({
+                      success: "Something went wrong.",
+                    });
+                  } else {
+                    console.error(
+                      "Unknown error occured during updation:",
+                      error
+                    );
+                    setValidationErrors({
+                      success: "Something went wrong.",
+                    });
+                  }
+                }
+              }
+            }
+          } catch (error) {
+            console.log("An unknow error occurred:", error);
+            setValidationErrors({
+              success: "Something went wrong.",
+            });
+          }
         }
-        // Close the edit form
-        props.closePopup();
-        window.location.reload();
-      } catch (error) {
-        console.log(error);
       }
+    } catch (error) {
+      console.log("An error occurred:", error);
+      // Handle other types of errors, e.g., setErrorState("An error occurred. Please try again.");
     }
   };
 
@@ -68,9 +196,31 @@ const ContactPopupEditForm = (props) => {
         await deleteContact(props.selectedContact.id);
         // Close the edit form
         props.closePopup();
-        window.location.reload(); // Navigate to "/"
+        window.location.reload();
       } catch (error) {
-        console.log(error);
+         if (error.response) {
+           if (error.response.status === 404) {
+             console.error("Contact not found");
+             setValidationErrors({
+               success: "Contact does not exist.",
+             });
+           } else if (error.response.status === 500) {
+             console.error("Server error");
+             setValidationErrors({
+               success: "Something went wrong.",
+             });
+           } else {
+             console.error("Unknown error occurred");
+             setValidationErrors({
+               success: "Something went wrong.",
+             });
+           }
+         } else {
+           console.error("An error occurred:", error);
+           setValidationErrors({
+             success: "Something went wrong.",
+           });
+         }
       }
     }
   };
@@ -111,6 +261,9 @@ const ContactPopupEditForm = (props) => {
                     onChange={handleInputChange}
                     className="text-lg text-whiterText p-1 bg-gray-700 rounded-md w-full"
                   />
+                  <div className="text-red-500 text-sm">
+                    {validationErrors.firstName}
+                  </div>
                 </div>
               </div>
               <div>
@@ -124,6 +277,9 @@ const ContactPopupEditForm = (props) => {
                     onChange={handleInputChange}
                     className="text-lg text-whiterText p-1 bg-gray-700 rounded-md w-full"
                   />
+                  <div className="text-red-500 text-sm">
+                    {validationErrors.lastName}
+                  </div>
                 </div>
               </div>
               <div>
@@ -137,6 +293,9 @@ const ContactPopupEditForm = (props) => {
                     onChange={handleInputChange}
                     className="text-lg text-whiterText p-1 bg-gray-700 rounded-md w-full"
                   />
+                  <div className="text-red-500 text-sm">
+                    {validationErrors.phoneNumber}
+                  </div>
                 </div>
               </div>
               <div>
@@ -150,6 +309,9 @@ const ContactPopupEditForm = (props) => {
                     onChange={handleInputChange}
                     className="text-lg text-whiterText p-1 bg-gray-700 rounded-md w-full"
                   />
+                  <div className="text-red-500 text-sm">
+                    {validationErrors.emailAddress}
+                  </div>
                 </div>
               </div>
               <div>
@@ -163,6 +325,9 @@ const ContactPopupEditForm = (props) => {
                     onChange={handleInputChange}
                     className="text-lg text-whiterText p-1 bg-gray-700 rounded-md w-full"
                   />
+                  <div className="text-red-500 text-sm">
+                    {validationErrors.birthDate}
+                  </div>
                 </div>
               </div>
             </div>
@@ -175,6 +340,9 @@ const ContactPopupEditForm = (props) => {
                   ? "Remove from Favorites"
                   : "Add to Favorites"}
               </button>
+              <div className="text-red-500 text-sm text-center">
+                {validationErrors.success}
+              </div>
               <button
                 type="submit"
                 className="bg-darkerPurple text-white px-4 py-2 rounded-lg transition duration-300 ease-in-out hover:scale-105"

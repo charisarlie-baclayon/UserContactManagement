@@ -22,7 +22,6 @@ const ContactList = (props) => {
         console.error("Error fetching contacts:", error);
       }
     }
-
     fetchContacts();
   }, []);
 
