@@ -20,6 +20,7 @@ const RegisterView = () => {
     email: "",
     password: "",
     confirmPassword: "",
+    success: "",
   });
 
   const handleChange = (e) => {
@@ -45,18 +46,51 @@ const RegisterView = () => {
       if (errors) {
         setValidationErrors(errors);
       } else {
-        setValidationErrors(null);
-        const response = await registerUser(registrationData);
-        console.log(response.data);
-        handleLogin();
+        setValidationErrors({});
+
+        try {
+          const response = await registerUser(registrationData);
+
+          if (response.status === 200) {
+            console.log("Registration successful:", response.data);
+            handleLogin();
+          } else if (response.status === 400) {
+            console.log("Registration unsuccessful due to null return.");
+            setValidationErrors({
+              success: "Registration failed. Please try again.",
+            });
+          }
+        } catch (error) {
+          if (error.response) {
+            if (error.response.status === 409) {
+              console.log("User already exists. Unsuccessful registration.");
+              setValidationErrors({
+                success: "User already exists.",
+              });
+            } else if (error.response.status === 500) {
+              console.error("Server error:", error.response.data);
+              setValidationErrors({
+                success: "Something went wrong.",
+              });
+            }
+          } else {
+            console.error("Error during registration:", error);
+            setValidationErrors({
+              success: "Something went wrong.",
+            });
+          }
+        }
       }
     } catch (error) {
       console.error("Error registering:", error);
+      setValidationErrors({
+        success: "Something went wrong.",
+      });
     }
   };
 
   const validate = () => {
-    const errors ={}
+    const errors = {};
     if (!registrationData.firstName) {
       errors.firstName = "First name is required.";
     } else if (
@@ -94,22 +128,19 @@ const RegisterView = () => {
     } else if (registrationData.email.length > 100) {
       errors.email = "Email must not exceed 100 characters.";
     }
-    if (!registrationData.password){
-      errors.password = "Confirm Password is required.";
-    }
-    else if (registrationData.password !== registrationData.confirmPassword) {
+    if (!registrationData.password) {
+      errors.password = "Password is required.";
+    } else if (registrationData.password !== registrationData.confirmPassword) {
       errors.confirmPassword = "Passwords do not match.";
     }
 
-    return Object.keys(errors).length === 0? null:errors;
+    return Object.keys(errors).length === 0 ? null : errors;
   };
-
 
   const handleLogin = async (e) => {
     if (e) {
       e.preventDefault();
     }
-
     // const response = await loginUser(
     //   registrationData.username,
     //   registrationData.password
@@ -118,7 +149,6 @@ const RegisterView = () => {
     // console.log(response.data);
     // sessionStorage.setItem("key", response.data);
     navigate("/login");
-    window.location.reload();
   };
 
   return (
@@ -249,6 +279,9 @@ const RegisterView = () => {
                 </div>
               </div>
               <hr class="border-none "></hr>
+              <div className="text-red-500 text-sm text-center">
+                {validationErrors.success}
+              </div>
               <div className="flex justify-between">
                 <button className="m-2 w-1/2 bg-darkerPurple rounded text-darkBlack py-2 font-bold transition duration-300 ease-in-out hover:underline hover:scale-105">
                   Register
