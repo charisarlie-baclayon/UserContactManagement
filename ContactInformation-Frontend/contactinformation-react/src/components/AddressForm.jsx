@@ -14,6 +14,28 @@ const AddressForm = (props) => {
 
   const [selectedAddressIndex, setSelectedAddressIndex] = useState(-1);
 
+  const [validationErrors, setValidationErrors] = useState({
+    addressDescription: "",
+    addressType: "",
+    success: "",
+  });
+
+  const validate = (address) => {
+    const errors = {};
+    if (!address.addressDescription) {
+      errors.addressDescription = "Address description is required.";
+    } else if (address.addressDescription.length < 10) {
+      errors.addressDescription =
+        "Address description must be at least 10 characters.";
+    }
+
+    if (!address.addressType) {
+      errors.addressType = "Address type is required.";
+    }
+
+    return Object.keys(errors).length === 0 ? null : errors;
+  };
+
   useEffect(() => {
     // Fetch address types when the component mounts
     fetchAddressTypes();
@@ -53,30 +75,219 @@ const AddressForm = (props) => {
 
     if (confirmed) {
       try {
-        if (selectedAddressIndex !== -1) {
-          // Update existing address
-          console.log(props.selectedAddress);
-          const updatedAddress = addresses[selectedAddressIndex];
-          await updateAddress(
-            props.contactId,
-            updatedAddress.id,
-            updatedAddress
-          );
-        } else {
-          // Create new addresses
-          for (const address of addresses) {
-            await createAddress(props.contactId, address);
+        let allValid = true;
+
+        for (const address of addresses) {
+          const errors = validate(address);
+
+          if (errors) {
+            setValidationErrors(errors);
+            allValid = false;
+            break; // No need to continue checking if any address is invalid
           }
         }
-        // Handle successful form submission
-        console.log("Addresses submitted:", addresses);
-        window.location.reload();
-        props.closePopup();
+
+        if (allValid) {
+          setValidationErrors({});
+
+          if (selectedAddressIndex !== -1) {
+            // Update existing address
+            const updatedAddress = addresses[selectedAddressIndex];
+
+            try {
+              const response = await updateAddress(
+                props.contactId,
+                updatedAddress.id,
+                updatedAddress
+              );
+
+              if (response.status === 200) {
+                console.log("Address updated:", response.data);
+                // Handle successful form submission
+                window.location.reload();
+                props.closePopup();
+              }
+            } catch (error) {
+              handleApiError(error);
+            }
+          } else {
+            // Create new addresses
+            try {
+              for (const address of addresses) {
+                const response = await createAddress(props.contactId, address);
+
+                if (response.status === 200) {
+                  console.log("Address created:", response.data);
+                } else {
+                  console.error("Unexpected response:", response);
+                }
+              }
+
+              // Handle successful form submission
+              window.location.reload();
+              props.closePopup();
+            } catch (error) {
+              handleApiError(error);
+            }
+          }
+          window.location.reload();
+          props.closePopup();
+        }
       } catch (error) {
-        console.log(error);
+        console.log("An error occurred:", error);
+        setValidationErrors({
+          success: "Something went wrong.",
+        });
       }
     }
   };
+
+  const handleApiError = (error) => {
+    if (error.response) {
+      if (error.response.status === 404) {
+        console.error("Address or contact not found.");
+        setValidationErrors({
+          success: "Address or contact not found.",
+        });
+      } else if (error.response.status === 400) {
+        console.error("Bad request:", error.response.data);
+        setValidationErrors({
+          success:
+            "Update failed. Something went wrong. Please check your data.",
+        });
+      } else {
+        console.error("Server error:", error.response.data);
+        setValidationErrors({
+          success: "Something went wrong.",
+        });
+      }
+    } else {
+      console.error("An error occurred:", error);
+      setValidationErrors({
+        success: "Something went wrong.",
+      });
+    }
+  };
+
+  // const handleFormSubmit = async (event) => {
+  //   event.preventDefault();
+
+  //   const confirmed = window.confirm(
+  //     "Are you sure you want to submit this address?"
+  //   );
+
+  //   if (confirmed) {
+  //     try {
+  //       if (selectedAddressIndex !== -1) {
+  //         // Update existing address
+  //         console.log(props.selectedAddress);
+  //         const updatedAddress = addresses[selectedAddressIndex];
+
+  //         try {
+  //           const errors = validate(updateAddress);
+
+  //           if (errors) {
+  //             setValidationErrors(errors);
+  //           } else {
+  //             setValidationErrors({});
+
+  //             const response = await updateAddress(
+  //               props.contactId,
+  //               updatedAddress.id,
+  //               updatedAddress
+  //             );
+
+  //             if (response.status === 200) {
+  //               console.log("Address updated:", response.data);
+  //               // Handle successful form submission
+  //               window.location.reload();
+  //               props.closePopup();
+  //             }
+  //           }
+  //         } catch (error) {
+  //           if (error.response) {
+  //             if (error.response.status === 404) {
+  //               console.error("Address or contact not found.");
+  //               setValidationErrors({
+  //                 success: "Address or contact not found.",
+  //               });
+  //             } else if (error.response.status === 400) {
+  //               console.error("Bad request:", error.response.data);
+  //               setValidationErrors({
+  //                 success:
+  //                   "Update failed. Something went wrong. Please check you data.",
+  //               });
+  //             } else {
+  //               console.error("Server error:", error.response.data);
+  //               setValidationErrors({
+  //                 success: "Something went wrong.",
+  //               });
+  //             }
+  //           } else {
+  //             console.error("An error occurred:", error);
+  //             setValidationErrors({
+  //               success: "Something went wrong.",
+  //             });
+  //           }
+  //         }
+  //       } else {
+  //         // Create new addresses
+  //         try {
+  //           for (const address of addresses) {
+  //             const errors = validate(address);
+
+  //             if (errors) {
+  //               setValidationErrors(errors);
+  //             } else {
+  //               setValidationErrors({});
+  //               const response = await createAddress(props.contactId, address);
+
+  //               if (response.status === 200) {
+  //                 console.log("Address created:", response.data);
+  //                 // Handle successful form submission
+  //                 window.location.reload();
+  //                 props.closePopup();
+  //               }
+  //             }
+  //           }
+  //         } catch (error) {
+  //           if (error.response) {
+  //             if (error.response.status === 404) {
+  //               console.log("Contact not found.");
+  //               setValidationErrors({
+  //                 success: "Contact does not exist.",
+  //               });
+  //             } else if (error.response.status === 400) {
+  //               console.log("Bad request:", error.response.data);
+  //               setValidationErrors({
+  //                 success:
+  //                   "Create failed. Something went wrong. Please check you data.",
+  //               });
+  //             } else {
+  //               console.log("Server error:", error.response.data);
+  //               setValidationErrors({
+  //                 success: "Something went wrong.",
+  //               });
+  //             }
+  //           } else {
+  //             console.log("An error occurred:", error);
+  //             setValidationErrors({
+  //               success: "Something went wrong.",
+  //             });
+  //           }
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.log("An error occurred:", error);
+  //       setValidationErrors({
+  //         success: "Something went wrong.",
+  //       });
+  //     }
+  //   }
+  //   window.location.reload();
+  //   props.closePopup();
+  // };
+
   const handleEditAddressClick = (index) => {
     setSelectedAddressIndex(index);
     setAddresses((prevAddresses) =>
@@ -93,18 +304,45 @@ const AddressForm = (props) => {
 
     if (confirmed) {
       try {
-        await deleteAddress(props.contactId, addressId);
-        console.log("Address deleted:", addressId);
+        const response = await deleteAddress(props.contactId, addressId);
 
-        // Update the addresses state to remove the deleted address
-        const updatedAddresses = addresses.filter(
-          (address) => address.id !== addressId
-        );
-        setAddresses(updatedAddresses);
+        if (response.status === 200) {
+          console.log("Address deleted:", addressId);
+
+          // Update the addresses state to remove the deleted address
+          const updatedAddresses = addresses.filter(
+            (address) => address.id !== addressId
+          );
+          setAddresses(updatedAddresses);
+        }
       } catch (error) {
-        console.log(error);
+        if (error.response) {
+          if (error.response.status === 404) {
+            console.error("Address or contact not found.");
+            setValidationErrors({
+              success: "Address or contact does not exist.",
+            });
+          } else if (error.response.status === 400) {
+            console.error("Bad request:", error.response.data);
+            setValidationErrors({
+              success: "Bad request. Please check again.",
+            });
+          } else {
+            console.error("Server error:", error.response.data);
+            setValidationErrors({
+              success: "Something went wrong.",
+            });
+          }
+        } else {
+          console.error("An error occurred:", error);
+          setValidationErrors({
+            success: "Something went wrong.",
+          });
+        }
       }
     }
+    window.location.reload();
+    props.closePopup();
   };
 
   const addNewAddress = () => {
@@ -150,6 +388,9 @@ const AddressForm = (props) => {
                       className="text-lg text-whiterText p-1 bg-gray-700 rounded-md w-full resize-none"
                       rows={3}
                     />
+                    <div className="text-red-500 text-sm">
+                      {validationErrors.addressDescription}
+                    </div>
                   </div>
                 </div>
                 <div>
@@ -168,6 +409,9 @@ const AddressForm = (props) => {
                         </option>
                       ))}
                     </select>
+                    <div className="text-red-500 text-sm">
+                      {validationErrors.addressType}
+                    </div>
                   </div>
                 </div>
                 <div></div>
