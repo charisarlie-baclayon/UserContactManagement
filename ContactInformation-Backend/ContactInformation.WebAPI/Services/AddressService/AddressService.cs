@@ -3,6 +3,7 @@ using ContactInformation.WebAPI.Dtos.Address;
 using ContactInformation.WebAPI.Exceptions;
 using ContactInformation.WebAPI.Models;
 using ContactInformation.WebAPI.Repositories.AddressRepository;
+using ContactInformation.WebAPI.Services.AuditTrailService;
 
 namespace ContactInformation.WebAPI.Services.AddressService
 {
@@ -13,16 +14,19 @@ namespace ContactInformation.WebAPI.Services.AddressService
     {
         private readonly IMapper _mapper;
         private readonly IAddressRepository _addressRepository;
+        private readonly IAuditTrailService _auditTrailService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AddressService"/> class.
         /// </summary>
         /// <param name="mapper">The AutoMapper instance for mapping between entities and DTOs.</param>
         /// <param name="addressRepository">The repository for address data operations.</param>
-        public AddressService(IMapper mapper, IAddressRepository addressRepository)
+        /// <param name="auditTrailService">An instance of IAuditTrailService for accessing the AuditTrailService.</param>
+        public AddressService(IMapper mapper, IAddressRepository addressRepository, IAuditTrailService auditTrailService)
         {
             _mapper = mapper;
             _addressRepository = addressRepository;
+            _auditTrailService = auditTrailService;
         }
 
         /// <inheritdoc />
@@ -36,6 +40,7 @@ namespace ContactInformation.WebAPI.Services.AddressService
             {
                 throw new AddressCreationFailedException("Address creation failed.");
             }
+            await _auditTrailService.LogAuditTrail("Create", "Address", addressId);
             return addressId;
         }
 
@@ -47,6 +52,8 @@ namespace ContactInformation.WebAPI.Services.AddressService
             {
                 throw new AddressDeletionFailedException("Address deletion failed.");
             }
+
+            await _auditTrailService.LogAuditTrail("Delete", "Address", addressId);
             return deleted;
         }
 
@@ -96,6 +103,8 @@ namespace ContactInformation.WebAPI.Services.AddressService
             {
                 throw new AddressUpdateFailedException("Address update failed.");
             }
+
+            await _auditTrailService.LogAuditTrail("Update", "Address", addressId);
             return result!;
         }
     }

@@ -27,6 +27,7 @@ namespace ContactInformation.WebAPI.Services.AuthenticationService
         /// <param name="mapper">AutoMapper instance for object mapping.</param>
         /// <param name="userService">User service for user-related operations.</param>
         /// <param name="configuration">Configuration settings.</param>
+        /// <param name="auditTrailService">An instance of IAuditTrailService for accessing the AuditTrailService.</param>
         public AuthenticationService(IMapper mapper, IUserService userService, IConfiguration configuration, IAuditTrailService auditTrailService)
         {
             _mapper = mapper;
