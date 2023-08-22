@@ -1,8 +1,11 @@
 using ContactInformation.WebAPI.Context;
+using ContactInformation.WebAPI.Repositories;
 using ContactInformation.WebAPI.Repositories.AddressRepository;
+using ContactInformation.WebAPI.Repositories.AuditTrailRepository;
 using ContactInformation.WebAPI.Repositories.ContactRepository;
 using ContactInformation.WebAPI.Repositories.UserRepository;
 using ContactInformation.WebAPI.Services.AddressService;
+using ContactInformation.WebAPI.Services.AuditTrailService;
 using ContactInformation.WebAPI.Services.AuthenticationService;
 using ContactInformation.WebAPI.Services.ContactService;
 using ContactInformation.WebAPI.Services.UserService;
@@ -131,11 +134,13 @@ void ConfigureServices(IServiceCollection services)
     services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
     // Register Repositories
+    services.AddScoped<IAuditTrailRepository, AuditTrailRepository>();
     services.AddScoped<IUserRepository, UserRepository>();
     services.AddScoped<IContactRepository, ContactRepository>();
     services.AddScoped<IAddressRepository, AddressRepository>();
 
     // Register Services
+    services.AddScoped<IAuditTrailService, AuditTrailService>();
     services.AddScoped<IUserService, UserService>();
     services.AddScoped<IAuthenticationService, AuthenticationService>();
     services.AddScoped<IContactService, ContactService>();
