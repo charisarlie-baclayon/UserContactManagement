@@ -49,38 +49,37 @@ const RegisterView = () => {
         const confirmed = window.confirm("Are you sure you want to register?");
         if (confirmed) {
           setValidationErrors({});
-        }
+          try {
+            const response = await registerUser(registrationData);
 
-        try {
-          const response = await registerUser(registrationData);
-
-          if (response.status === 200) {
-            console.log("Registration successful:", response.data);
-            handleLogin();
-          } else if (response.status === 400) {
-            console.log("Registration unsuccessful due to null return.");
-            setValidationErrors({
-              success: "Registration failed. Please try again.",
-            });
-          }
-        } catch (error) {
-          if (error.response) {
-            if (error.response.status === 409) {
-              console.log("User already exists. Unsuccessful registration.");
+            if (response.status === 200) {
+              console.log("Registration successful:", response.data);
+              handleLogin();
+            } else if (response.status === 400) {
+              console.log("Registration unsuccessful due to null return.");
               setValidationErrors({
-                success: "User already exists.",
+                success: "Registration failed. Please try again.",
               });
-            } else if (error.response.status === 500) {
-              console.error("Server error:", error.response.data);
+            }
+          } catch (error) {
+            if (error.response) {
+              if (error.response.status === 409) {
+                console.log("User already exists. Unsuccessful registration.");
+                setValidationErrors({
+                  success: "User already exists.",
+                });
+              } else if (error.response.status === 500) {
+                console.error("Server error:", error.response.data);
+                setValidationErrors({
+                  success: "Something went wrong.",
+                });
+              }
+            } else {
+              console.error("Error during registration:", error);
               setValidationErrors({
                 success: "Something went wrong.",
               });
             }
-          } else {
-            console.error("Error during registration:", error);
-            setValidationErrors({
-              success: "Something went wrong.",
-            });
           }
         }
       }
