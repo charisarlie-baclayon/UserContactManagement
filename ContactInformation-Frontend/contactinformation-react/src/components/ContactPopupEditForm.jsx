@@ -349,13 +349,15 @@ const ContactPopupEditForm = (props) => {
               >
                 Save
               </button>
-              <button
-                type="button"
-                onClick={handleDelete}
-                className="bg-transparent border border-red-400 text-red-400 px-4 py-2 rounded-lg transition duration-300 ease-in-out hover:underline hover:scale-105"
-              >
-                Delete
-              </button>
+              {!isCreateMode && (
+                <button
+                  type="button"
+                  onClick={handleDelete}
+                  className="bg-transparent border border-red-400 text-red-400 px-4 py-2 rounded-lg transition duration-300 ease-in-out hover:underline hover:scale-105"
+                >
+                  Delete
+                </button>
+              )}
             </div>
           </form>
         </div>
