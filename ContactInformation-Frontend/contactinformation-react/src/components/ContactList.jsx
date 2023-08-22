@@ -33,6 +33,10 @@ const ContactList = (props) => {
         .includes(props.searchTerm.toLowerCase())
   );
 
+  const sortedFilteredContacts = [...filteredContacts].sort((a, b) =>
+    a.firstName.localeCompare(b.firstName)
+  );
+
   const openPopup = (contact) => {
     setSelectedContact(contact);
     setIsPopupOpen(true);
@@ -60,11 +64,11 @@ const ContactList = (props) => {
         title={props.title}
       />
 
-      {filteredContacts.length === 0 ? (
+      {sortedFilteredContacts.length === 0 ? (
         <p className="text-center mt-4 text-gray-500">No contacts found.</p>
       ) : (
         <ul role="list" className="divide-y divide-greyBorder">
-          {filteredContacts.map((contact) => (
+          {sortedFilteredContacts.map((contact) => (
             <li
               key={contact.emailAddress}
               className="flex justify-between gap-x-6 py-5 cursor-pointer hover:bg-accentPurple rounded-md"
