@@ -61,7 +61,7 @@ const ContactPopup = (props) => {
             </p>
           </div>
           <div className=" bg-gray-700 rounded-md p-2">
-            <span className="text-sm">Phone Number:</span>{" "}
+            <span className="text-sm">Mobile Number:</span>{" "}
             <p className="text-lg">{props.selectedContact.phoneNumber}</p>
           </div>
           <div className=" bg-gray-700 rounded-md p-2">

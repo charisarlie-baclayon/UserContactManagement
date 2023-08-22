@@ -282,7 +282,7 @@ const ContactPopupEditForm = (props) => {
                 </div>
               </div>
               <div>
-                <span className="text-sm">PhoneNumber:</span>
+                <span className="text-sm">Mobile Number:</span>
                 <div className="rounded-md">
                   {""}
                   <input
