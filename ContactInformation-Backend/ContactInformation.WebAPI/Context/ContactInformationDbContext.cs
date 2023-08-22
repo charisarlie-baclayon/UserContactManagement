@@ -24,6 +24,11 @@ namespace ContactInformation.WebAPI.Context
         public DbSet<Address> Addresses { get; set; } = null!;
 
         /// <summary>
+        /// Gets or sets the collection of audit logs in the database.
+        /// </summary>
+        public DbSet<Address> AuditTral { get; set; } = null!;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ContactInformationDbContext"/> class.
         /// </summary>
         /// <param name="options">The options for configuring the database context.</param>
