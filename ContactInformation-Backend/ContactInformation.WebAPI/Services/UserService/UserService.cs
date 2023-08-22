@@ -43,7 +43,7 @@ namespace ContactInformation.WebAPI.Services.UserService
                 return 0;
             }
             var newUserId = await _userRepository.CreateUser(newUser);
-            await _auditTrailService.LogAuditTrail("Create", "Contact", newUserId);
+            await _auditTrailService.LogAuditTrail("Create", "User", newUserId);
             return newUserId;
         }
 
@@ -55,7 +55,7 @@ namespace ContactInformation.WebAPI.Services.UserService
             {
                 throw new UserDeletionFailedException("Address deletion failed.");
             }
-            await _auditTrailService.LogAuditTrail("Delete", "Contact", userId);
+            await _auditTrailService.LogAuditTrail("Delete", "User", userId);
             return res;
         }
 
@@ -104,7 +104,7 @@ namespace ContactInformation.WebAPI.Services.UserService
                 throw new UserUpdateFailedException("User update failed.");
             }
 
-            await _auditTrailService.LogAuditTrail("Update", "Contact", userId);
+            await _auditTrailService.LogAuditTrail("Update", "User", userId);
             return _mapper.Map<UserDto>(newUserResponse);
         }
 
