@@ -41,11 +41,7 @@ const LoginView = () => {
     if (errors) {
       setValidationErrors(errors);
     } else {
-      const errors = {
-        username: "",
-        password: "",
-      };
-      setValidationErrors(errors);
+      setValidationErrors({});
       try {
         const response = await loginUser(
           loginData.username,
