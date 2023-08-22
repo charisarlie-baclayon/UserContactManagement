@@ -155,117 +155,125 @@ const UserSettingsView = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-semibold mb-4 text-whiterText">
+      <h1 className="text-2xl font-semibold mb-4 text-whiterText">
         User Settings
       </h1>
-      <div className="bg-gray-800 p-6 rounded-lg shadow-md">
-        <h2 className="text-xl font-semibold mb-2">Profile Information</h2>
-        <form onSubmit={handleUpdate}>
-          <div className="mb-4">
-            <label className="block text-gray-300">First Name</label>
-            <input
-              type="text"
-              name="firstName"
-              className="w-full p-2 rounded-md bg-gray-700 text-white"
-              value={user.firstName}
-              onChange={handleChange}
-            />
-            <div className="text-red-500 text-sm">
-              {validationErrors.firstName}
-            </div>
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-300">Last Name</label>
-            <input
-              type="text"
-              name="lastName"
-              className="w-full p-2 rounded-md bg-gray-700 text-white"
-              value={user.lastName}
-              onChange={handleChange}
-            />
-            <div className="text-red-500 text-sm">
-              {validationErrors.lastName}
-            </div>
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-300">Username</label>
-            <input
-              type="text"
-              name="username"
-              className="w-full p-2 rounded-md bg-gray-700 text-white"
-              value={user.username}
-              onChange={handleChange}
-            />
-            <div className="text-red-500 text-sm">
-              {validationErrors.username}
-            </div>
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-300">Email</label>
-            <input
-              type="email"
-              name="email"
-              className="w-full p-2 rounded-md bg-gray-700 text-white"
-              value={user.email}
-              onChange={handleChange}
-            />
-            <div className="text-red-500 text-sm">{validationErrors.email}</div>
-          </div>
-          <div className="flex gap-4">
-            <div className="mb-4 w-1/2">
-              <label className="block text-gray-300">Password</label>
+      <div className="pl-20 pr-20">
+        <div className="bg-gray-800 p-6 rounded-lg shadow-md">
+          <h2 className="text-xl font-semibold mb-2 text-center text-whiterText">
+            Profile Information
+          </h2>
+          <form onSubmit={handleUpdate}>
+            <div className="mb-4">
+              <label className="text-sm block text-gray-300">First Name</label>
               <input
-                type="password"
-                name="password"
-                className="w-full p-2 rounded-md bg-gray-700 text-white"
-                value={user.password}
+                type="text"
+                name="firstName"
+                className="text-md w-full p-2 rounded-md bg-gray-700 text-white"
+                value={user.firstName}
                 onChange={handleChange}
               />
               <div className="text-red-500 text-sm">
-                {validationErrors.password}
+                {validationErrors.firstName}
               </div>
             </div>
-            <div className="mb-4 w-1/2">
-              <label className="block text-gray-300">Confirm Password</label>
+            <div className="mb-4">
+              <label className="text-sm block text-gray-300">Last Name</label>
               <input
-                type="password"
-                name="confirmPassword"
-                className="w-full p-2 rounded-md bg-gray-700 text-white"
-                value={user.confirmPassword}
+                type="text"
+                name="lastName"
+                className="text-md w-full p-2 rounded-md bg-gray-700 text-white"
+                value={user.lastName}
                 onChange={handleChange}
               />
               <div className="text-red-500 text-sm">
-                {validationErrors.confirmPassword}
+                {validationErrors.lastName}
               </div>
             </div>
-          </div>
-          <div className="flex justify-between">
-            <button
-              onClick={handleDelete}
-              className="bg-red-500 px-4 py-2 text-white rounded-lg hover:bg-red-600"
-            >
-              Delete Account
-            </button>
+            <div className="mb-4">
+              <label className="text-sm block text-gray-300">Username</label>
+              <input
+                type="text"
+                name="username"
+                className="text-md w-full p-2 rounded-md bg-gray-700 text-white"
+                value={user.username}
+                onChange={handleChange}
+              />
+              <div className="text-red-500 text-sm">
+                {validationErrors.username}
+              </div>
+            </div>
+            <div className="mb-4">
+              <label className="text-sm block text-gray-300">Email</label>
+              <input
+                type="email"
+                name="email"
+                className="text-md w-full p-2 rounded-md bg-gray-700 text-white"
+                value={user.email}
+                onChange={handleChange}
+              />
+              <div className="text-red-500 text-sm">
+                {validationErrors.email}
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <div className="mb-4 w-1/2">
+                <label className="text-sm block text-gray-300">Password</label>
+                <input
+                  type="password"
+                  name="password"
+                  className="text-md w-full p-2 rounded-md bg-gray-700 text-white"
+                  value={user.password}
+                  onChange={handleChange}
+                />
+                <div className="text-sm text-red-500">
+                  {validationErrors.password}
+                </div>
+              </div>
+              <div className="mb-4 w-1/2">
+                <label className="text-sm block text-gray-300">
+                  Confirm Password
+                </label>
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  className="text-md w-full p-2 rounded-md bg-gray-700 text-white"
+                  value={user.confirmPassword}
+                  onChange={handleChange}
+                />
+                <div className="text-red-500 text-sm">
+                  {validationErrors.confirmPassword}
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-between">
+              <button
+                onClick={handleDelete}
+                className="text-md bg-red-500 px-4 py-2 text-white rounded-lg hover:bg-red-600"
+              >
+                Delete Account
+              </button>
 
-            <button
-              type="submit"
-              className="bg-darkerPurple text-white py-2 px-4 rounded-lg hover:bg-purple-600"
-            >
-              Save Changes
-            </button>
-          </div>
-        </form>
-      </div>
-      <div className="mt-6 flex justify-between">
-        <button
-          className="text-darkerPurple hover:underline"
-          onClick={handleLogout}
-        >
-          Logout
-        </button>
-        <Link to="/" className="text-darkerPurple hover:underline">
-          Back to Home
-        </Link>
+              <button
+                type="submit"
+                className="bg-darkerPurple text-white py-2 px-4 rounded-lg hover:bg-purple-600"
+              >
+                Save Changes
+              </button>
+            </div>
+          </form>
+        </div>
+        <div className="mt-6 flex justify-between">
+          <button
+            className="text-darkerPurple hover:underline"
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
+          <Link to="/" className="text-darkerPurple hover:underline">
+            Back to Home
+          </Link>
+        </div>
       </div>
     </div>
   );
