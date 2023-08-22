@@ -30,7 +30,7 @@ namespace ContactInformation.WebAPI.Services.AuditTrailService
 
             var auditTrail = new AuditTrail
             {
-                Timestamp = DateTime.UtcNow,
+                Timestamp = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Asia/Singapore")),
                 Action = action,
                 EntityType = entityType,
                 EntityId = entityId,
