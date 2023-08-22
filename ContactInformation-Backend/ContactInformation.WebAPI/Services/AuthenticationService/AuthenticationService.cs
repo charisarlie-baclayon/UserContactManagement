@@ -2,6 +2,7 @@
 using ContactInformation.WebAPI.Dtos.User;
 using ContactInformation.WebAPI.Exceptions;
 using ContactInformation.WebAPI.Models;
+using ContactInformation.WebAPI.Services.AuditTrailService;
 using ContactInformation.WebAPI.Services.UserService;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -18,6 +19,7 @@ namespace ContactInformation.WebAPI.Services.AuthenticationService
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
         private readonly IConfiguration _configuration;
+        private readonly IAuditTrailService _auditTrailService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AuthenticationService"/> class.
@@ -25,11 +27,12 @@ namespace ContactInformation.WebAPI.Services.AuthenticationService
         /// <param name="mapper">AutoMapper instance for object mapping.</param>
         /// <param name="userService">User service for user-related operations.</param>
         /// <param name="configuration">Configuration settings.</param>
-        public AuthenticationService(IMapper mapper, IUserService userService, IConfiguration configuration)
+        public AuthenticationService(IMapper mapper, IUserService userService, IConfiguration configuration, IAuditTrailService auditTrailService)
         {
             _mapper = mapper;
             _userService = userService;
             _configuration = configuration;
+            _auditTrailService = auditTrailService;
         }
 
         /// <inheritdoc/>
@@ -61,6 +64,7 @@ namespace ContactInformation.WebAPI.Services.AuthenticationService
             }
 
             newUserModel.Id = newUserId;
+            await _auditTrailService.LogAuditTrail("Register", string.Empty, newUserId);
             return _mapper.Map<UserDto>(newUserModel);
         }
 
@@ -79,6 +83,8 @@ namespace ContactInformation.WebAPI.Services.AuthenticationService
                 throw new UnauthorizedAccessException("Incorrect password.");
             }
             string token = CreateToken(user);
+
+            await _auditTrailService.LogAuditTrail("Login", string.Empty, user.Id);
             return token;
         }
 
