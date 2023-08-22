@@ -55,21 +55,28 @@ const LoginView = () => {
           navigate("/");
         }
       } catch (error) {
-      if (error.response) {
-        if (error.response.status === 401) {
-          // Unauthorized (Invalid credentials)
+        if (error.response) {
+          if (error.response.status === 401) {
+            // Unauthorized (Invalid credentials)
+            setValidationErrors({
+              success: "Invalid username or password.",
+            });
+            console.error("Login error:", error.response.data);
+          } else if (error.response.status === 500) {
+            // Server error
+            console.error("Server error:", error.response.data);
+            setValidationErrors({
+              success: "Something went wrong.",
+            });
+          }
+        } else {
+          console.error("Error during login:", error);
           setValidationErrors({
-            success: "Invalid username or password.",
+            success: "Something went wrong.",
           });
-        } else if (error.response.status === 500) {
-          // Server error
-          console.error("Server error:", error.response.data);
         }
-      } else {
-        console.error("Error during login:", error);
       }
     }
-  }
   };
 
   useEffect(() => {
