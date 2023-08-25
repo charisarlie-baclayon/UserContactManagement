@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  backend:
+    image: charisarlie/usercontactmanagementbackend:latest
+    ports:
+      - "7038:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+  frontend:
+    image: charisarlie/usercontactmanagementfrontend:latest
+    ports:
+      - "5173:5173"
