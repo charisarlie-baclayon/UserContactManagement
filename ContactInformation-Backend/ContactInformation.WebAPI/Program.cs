@@ -81,6 +81,12 @@ ConfigureServices(builder.Services);
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ContactInformationDbContext>();
+    db.Initialize();
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -110,7 +116,7 @@ void ConfigureServices(IServiceCollection services)
     // Register the DbContext.
     services.AddDbContext<ContactInformationDbContext>( options =>
     {
-        options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
+        options.UseSqlite(builder.Configuration.GetConnectionString("SqlServer"));
     });
 
     // Register JWT Authentication
