@@ -16,7 +16,6 @@ const ContactList = (props) => {
     async function fetchContacts() {
       try {
         const response = await getContacts();
-        console.log(response.data);
         setContacts(response.data);
       } catch (error) {
         console.error("Error fetching contacts:", error);

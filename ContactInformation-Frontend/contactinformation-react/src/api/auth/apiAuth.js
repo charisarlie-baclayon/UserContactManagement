@@ -22,7 +22,6 @@ export const registerUser = async (userRegistrationDto) => {
       "/api/authentication/register",
       userRegistrationDto
     );
-    console.log(response);
     return response;
   } catch (error) {
     throw error;
@@ -35,7 +34,6 @@ export const loginUser = async (username, password) => {
       username,
       password,
     });
-    console.log(response);
     return response;
   } catch (error) {
     throw error;

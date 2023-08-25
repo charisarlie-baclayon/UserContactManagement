@@ -23,7 +23,7 @@ namespace ContactInformation.WebAPI.Repositories.UserRepository
         /// <inheritdoc />
         public async Task<int> CreateUser(User newUser)
         {
-            _context.Users.Add(newUser);
+            _context.User.Add(newUser);
             var result = await _context.SaveChangesAsync();
 
             if (result > 0)
@@ -36,7 +36,7 @@ namespace ContactInformation.WebAPI.Repositories.UserRepository
         /// <inheritdoc />
         public async Task<User> UpdateUser(User updateUser)
         {
-            var user = await _context.Users
+            var user = await _context.User
                 .FirstOrDefaultAsync(u => u.Id == updateUser.Id);
 
             if (user == null)
@@ -62,14 +62,14 @@ namespace ContactInformation.WebAPI.Repositories.UserRepository
         /// <inheritdoc />
         public async Task<bool> DeleteUser(int userId)
         {
-            var user = await _context.Users
+            var user = await _context.User
                 .FirstOrDefaultAsync(u => u.Id == userId );
 
             if (user == null)
             {
                 return false;
             }
-            _context.Users.Remove(user);
+            _context.User.Remove(user);
             var result = await _context.SaveChangesAsync();
             if (result > 0)
             {
@@ -81,7 +81,7 @@ namespace ContactInformation.WebAPI.Repositories.UserRepository
         /// <inheritdoc />
         public async Task<User> GetUser(User userToGet)
         {
-            var user = await _context.Users
+            var user = await _context.User
                 .FirstOrDefaultAsync(u => u.Username.Equals(userToGet.Username));
             return user!;
         }
@@ -89,7 +89,7 @@ namespace ContactInformation.WebAPI.Repositories.UserRepository
         /// <inheritdoc />
         public async Task<User> GetUserById(int userId)
         {
-            var user = await _context.Users
+            var user = await _context.User
                 .FirstOrDefaultAsync(u => u.Id == userId);
             return user!;
         }
