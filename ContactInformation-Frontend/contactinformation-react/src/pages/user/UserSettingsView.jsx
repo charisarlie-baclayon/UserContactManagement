@@ -91,7 +91,6 @@ const UserSettingsView = () => {
       if (confirmed) {
         try {
           const updatedUserData = await updateUser(user);
-          console.log("User updated:", updatedUserData);
           navigate("/settings");
         } catch (error) {
           if (error.response) {

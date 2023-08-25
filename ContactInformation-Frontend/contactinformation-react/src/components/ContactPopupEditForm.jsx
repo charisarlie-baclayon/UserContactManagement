@@ -113,7 +113,6 @@ const ContactPopupEditForm = (props) => {
               try {
                 const response = await createContact(editedContact);
                 if (response.status === 200) {
-                  console.log("Contact created:", response.data);
                   // Close the edit form
                   props.closePopup();
                   window.location.reload();
@@ -143,7 +142,6 @@ const ContactPopupEditForm = (props) => {
                   editedContact
                 );
                 if (response.status === 200) {
-                  console.log("Contact updated:", response.data);
                   // Close the edit form
                   props.closePopup();
                   window.location.reload();

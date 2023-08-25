@@ -53,10 +53,8 @@ const RegisterView = () => {
             const response = await registerUser(registrationData);
 
             if (response.status === 200) {
-              console.log("Registration successful:", response.data);
               handleLogin();
             } else if (response.status === 400) {
-              console.log("Registration unsuccessful due to null return.");
               setValidationErrors({
                 success: "Registration failed. Please try again.",
               });
@@ -64,7 +62,6 @@ const RegisterView = () => {
           } catch (error) {
             if (error.response) {
               if (error.response.status === 409) {
-                console.log("User already exists. Unsuccessful registration.");
                 setValidationErrors({
                   success: "User already exists.",
                 });
@@ -143,13 +140,6 @@ const RegisterView = () => {
     if (e) {
       e.preventDefault();
     }
-    // const response = await loginUser(
-    //   registrationData.username,
-    //   registrationData.password
-    // );
-
-    // console.log(response.data);
-    // sessionStorage.setItem("key", response.data);
     navigate("/login");
   };
 

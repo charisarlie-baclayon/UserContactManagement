@@ -107,7 +107,6 @@ const AddressForm = (props) => {
             );
 
             if (response.status === 200) {
-              console.log("Address updated:", response.data);
               // Handle successful form submission
               window.location.reload();
               props.closePopup();
@@ -122,7 +121,6 @@ const AddressForm = (props) => {
               const response = await createAddress(props.contactId, address);
 
               if (response.status === 200) {
-                console.log("Address created:", response.data);
               } else {
                 console.error("Unexpected response:", response);
               }
@@ -174,125 +172,6 @@ const AddressForm = (props) => {
     }
   };
 
-  // const handleFormSubmit = async (event) => {
-  //   event.preventDefault();
-
-  //   const confirmed = window.confirm(
-  //     "Are you sure you want to submit this address?"
-  //   );
-
-  //   if (confirmed) {
-  //     try {
-  //       if (selectedAddressIndex !== -1) {
-  //         // Update existing address
-  //         console.log(props.selectedAddress);
-  //         const updatedAddress = addresses[selectedAddressIndex];
-
-  //         try {
-  //           const errors = validate(updateAddress);
-
-  //           if (errors) {
-  //             setValidationErrors(errors);
-  //           } else {
-  //             setValidationErrors({});
-
-  //             const response = await updateAddress(
-  //               props.contactId,
-  //               updatedAddress.id,
-  //               updatedAddress
-  //             );
-
-  //             if (response.status === 200) {
-  //               console.log("Address updated:", response.data);
-  //               // Handle successful form submission
-  //               window.location.reload();
-  //               props.closePopup();
-  //             }
-  //           }
-  //         } catch (error) {
-  //           if (error.response) {
-  //             if (error.response.status === 404) {
-  //               console.error("Address or contact not found.");
-  //               setValidationErrors({
-  //                 success: "Address or contact not found.",
-  //               });
-  //             } else if (error.response.status === 400) {
-  //               console.error("Bad request:", error.response.data);
-  //               setValidationErrors({
-  //                 success:
-  //                   "Update failed. Something went wrong. Please check you data.",
-  //               });
-  //             } else {
-  //               console.error("Server error:", error.response.data);
-  //               setValidationErrors({
-  //                 success: "Something went wrong.",
-  //               });
-  //             }
-  //           } else {
-  //             console.error("An error occurred:", error);
-  //             setValidationErrors({
-  //               success: "Something went wrong.",
-  //             });
-  //           }
-  //         }
-  //       } else {
-  //         // Create new addresses
-  //         try {
-  //           for (const address of addresses) {
-  //             const errors = validate(address);
-
-  //             if (errors) {
-  //               setValidationErrors(errors);
-  //             } else {
-  //               setValidationErrors({});
-  //               const response = await createAddress(props.contactId, address);
-
-  //               if (response.status === 200) {
-  //                 console.log("Address created:", response.data);
-  //                 // Handle successful form submission
-  //                 window.location.reload();
-  //                 props.closePopup();
-  //               }
-  //             }
-  //           }
-  //         } catch (error) {
-  //           if (error.response) {
-  //             if (error.response.status === 404) {
-  //               console.log("Contact not found.");
-  //               setValidationErrors({
-  //                 success: "Contact does not exist.",
-  //               });
-  //             } else if (error.response.status === 400) {
-  //               console.log("Bad request:", error.response.data);
-  //               setValidationErrors({
-  //                 success:
-  //                   "Create failed. Something went wrong. Please check you data.",
-  //               });
-  //             } else {
-  //               console.log("Server error:", error.response.data);
-  //               setValidationErrors({
-  //                 success: "Something went wrong.",
-  //               });
-  //             }
-  //           } else {
-  //             console.log("An error occurred:", error);
-  //             setValidationErrors({
-  //               success: "Something went wrong.",
-  //             });
-  //           }
-  //         }
-  //       }
-  //     } catch (error) {
-  //       console.log("An error occurred:", error);
-  //       setValidationErrors({
-  //         success: "Something went wrong.",
-  //       });
-  //     }
-  //   }
-  //   window.location.reload();
-  //   props.closePopup();
-  // };
-
   const handleEditAddressClick = (index) => {
     setSelectedAddressIndex(index);
     setAddresses((prevAddresses) =>
@@ -312,7 +191,6 @@ const AddressForm = (props) => {
         const response = await deleteAddress(props.contactId, addressId);
 
         if (response.status === 200) {
-          console.log("Address deleted:", addressId);
 
           // Update the addresses state to remove the deleted address
           const updatedAddresses = addresses.filter(

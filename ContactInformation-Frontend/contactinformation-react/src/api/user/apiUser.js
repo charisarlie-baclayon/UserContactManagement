@@ -17,7 +17,6 @@ api.interceptors.request.use((config) => {
 export const getUser = async () => {
   try {
     const response = await api.get("/api/users");
-    console.log(response);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -28,7 +27,6 @@ export const getUser = async () => {
 export const updateUser = async (userToUpdate) => {
   try {
     const response = await api.put("/api/users", userToUpdate);
-    console.log(response);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -39,7 +37,6 @@ export const updateUser = async (userToUpdate) => {
 export const deleteUser = async () => {
   try {
     const response = await api.delete("/api/users");
-    console.log(response);
     return response.data;
   } catch (error) {
     console.log(error);
