@@ -17,7 +17,6 @@ api.interceptors.request.use((config) => {
 export const getContacts = async () => {
   try {
     const response = await api.get("/api/contacts");
-    console.log(response);
     return response;
   } catch (error) {
     console.log(error);
@@ -28,7 +27,6 @@ export const getContacts = async () => {
 export const createContact = async (contactData) => {
   try {
     const response = await api.post("/api/contacts", contactData);
-    console.log(response);
     return response;
   } catch (error) {
     console.log(error);
@@ -39,7 +37,6 @@ export const createContact = async (contactData) => {
 export const updateContact = async (contactId, contactData) => {
   try {
     const response = await api.put(`/api/contacts/${contactId}`, contactData);
-    console.log(response);
     return response;
   } catch (error) {
     console.log(error);
@@ -50,7 +47,6 @@ export const updateContact = async (contactId, contactData) => {
 export const deleteContact = async (contactId) => {
   try {
     const response = await api.delete(`/api/contacts/${contactId}`);
-    console.log(response);
     return response;
   } catch (error) {
     console.log(error);

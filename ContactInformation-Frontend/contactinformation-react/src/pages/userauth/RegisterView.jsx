@@ -270,7 +270,7 @@ const RegisterView = () => {
                   </div>
                 </div>
               </div>
-              <hr class="border-none "></hr>
+              <hr classNam="border-none "></hr>
               <div className="text-red-500 text-sm text-center">
                 {validationErrors.success}
               </div>
@@ -285,7 +285,7 @@ const RegisterView = () => {
                   Cancel
                 </button>
               </div>
-              <hr class="border-none "></hr>
+              <hr className="border-none "></hr>
             </form>
           </div>
         </div>

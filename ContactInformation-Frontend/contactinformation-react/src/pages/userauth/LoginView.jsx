@@ -50,7 +50,6 @@ const LoginView = () => {
 
         if (response.status === 200) {
           const token = response.data;
-          console.log(token);
           sessionStorage.setItem("key", token);
           navigate("/");
         }
